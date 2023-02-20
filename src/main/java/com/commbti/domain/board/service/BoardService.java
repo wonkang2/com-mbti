@@ -1,5 +1,6 @@
 package com.commbti.domain.board.service;
 
+import com.commbti.domain.board.dto.BoardListResponseDto;
 import com.commbti.domain.board.dto.BoardPatchDto;
 import com.commbti.domain.board.dto.BoardPostDto;
 import com.commbti.domain.board.entity.Board;
@@ -8,11 +9,14 @@ import com.commbti.domain.file.service.FileService;
 import com.commbti.domain.member.entity.Member;
 import com.commbti.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -48,9 +52,16 @@ public class BoardService {
 
         return board.getId();
     }
-
     // 게시글 조회(전체)
+    public List<BoardListResponseDto> findBoardListPage(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        List<Board> boardList = boardRepository.findAllByPage(pageRequest);
 
+        List<BoardListResponseDto> response = boardList.stream().map(board -> board.toListResponseDto())
+                .collect(Collectors.toList());
+
+        return response;
+    }
     // 게시글 조회(mbti별)
 
     // 게시글 상세 조회

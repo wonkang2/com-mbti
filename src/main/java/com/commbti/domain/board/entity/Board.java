@@ -1,5 +1,6 @@
 package com.commbti.domain.board.entity;
 
+import com.commbti.domain.board.dto.BoardListResponseDto;
 import com.commbti.domain.member.entity.MbtiType;
 import com.commbti.domain.member.entity.Member;
 import com.commbti.global.base.DateTime;
@@ -46,5 +47,14 @@ public class Board extends DateTime {
                 .ifPresent(content -> this.content = content);
         Optional.ofNullable(optionalFilePath)
                 .ifPresent(filePath -> this.filePath = filePath);
+    }
+
+    public BoardListResponseDto toListResponseDto() {
+        return BoardListResponseDto.builder()
+                .id(this.id)
+                .title(this.title)
+                .username(this.member.getNickname())
+                .mbtiType(this.member.getMbtiType())
+                .createdAt(super.getCreatedAt()).build();
     }
 }
