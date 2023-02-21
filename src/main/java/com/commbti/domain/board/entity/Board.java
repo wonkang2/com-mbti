@@ -23,17 +23,15 @@ public class Board extends DateTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    @Enumerated(value = EnumType.STRING)
-    private MbtiType mbtiType;
 
     protected Board() {
     }
 
     private Board(String title, String content, String filePath, Member member) {
         this.title = title;
+        this.filePath = filePath;
         this.content = content;
         this.member = member;
-        this.mbtiType = member.getMbtiType();
     }
 
     public static Board createBoard(String title, String content, String filePath, Member member) {

@@ -6,6 +6,7 @@ import com.commbti.domain.board.dto.BoardPostDto;
 import com.commbti.domain.board.entity.Board;
 import com.commbti.domain.board.repository.BoardRepository;
 import com.commbti.domain.file.service.FileService;
+import com.commbti.domain.member.entity.MbtiType;
 import com.commbti.domain.member.entity.Member;
 import com.commbti.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +63,14 @@ public class BoardService {
 
         return response;
     }
+
     // 게시글 조회(mbti별)
+    public List<BoardListResponseDto> findBoardListPageByMbit(int page, int size, MbtiType mbti) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        List<Board> boardList = boardRepository.findPageByMbti(pageRequest, mbti);
+
+        return boardList.stream().map(board -> board.toListResponseDto()).collect(Collectors.toList());
+    }
 
     // 게시글 상세 조회
 
