@@ -3,6 +3,7 @@ package com.commbti.domain.board.service;
 import com.commbti.domain.board.dto.BoardListResponseDto;
 import com.commbti.domain.board.dto.BoardPatchDto;
 import com.commbti.domain.board.dto.BoardPostDto;
+import com.commbti.domain.board.dto.BoardResponseDto;
 import com.commbti.domain.board.entity.Board;
 import com.commbti.domain.board.repository.BoardRepository;
 import com.commbti.domain.file.service.FileService;
@@ -73,6 +74,12 @@ public class BoardService {
     }
 
     // 게시글 상세 조회
+    public BoardResponseDto findBoard(Long boardId) {
+        Optional<Board> optionalBoard = boardRepository.findById(boardId);
+        Board board = optionalBoard.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+
+        return board.toResponseDto();
+    }
 
     // 게시글 삭제
 }

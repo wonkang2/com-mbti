@@ -6,6 +6,7 @@ import com.commbti.domain.member.entity.MbtiType;
 import com.commbti.domain.member.entity.Member;
 import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -28,6 +29,7 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    @EntityGraph(attributePaths = {"member"})
     public Optional<Board> findById(Long boardId) {
         return Optional.ofNullable(em.find(Board.class, boardId));
     }
