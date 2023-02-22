@@ -43,11 +43,14 @@ public class BoardService {
         return board.getId();
     }
     // 게시글 수정
+    @Transactional
     public Long updateBoard(Long memberId, Long boardId, BoardPatchDto patchDto) {
-        Member member = memberService.findMember(memberId);
         Optional<Board> optionalBoard = boardRepository.findById(boardId);
         Board board = optionalBoard.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
 
+        if (!(board.getMember().getId() == memberId)) {
+            throw new IllegalArgumentException("잘못된 접근입니다.");
+        }
         String filePath = fileService.update(patchDto.getFile());
 
         board.update(patchDto.getTitle(), patchDto.getContent(), filePath);
