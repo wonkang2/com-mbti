@@ -82,4 +82,15 @@ public class BoardService {
     }
 
     // 게시글 삭제
+    @Transactional
+    public boolean deleteBoard(Long memberId, Long boardId) {
+        Optional<Board> optionalBoard = boardRepository.findById(boardId);
+        Board board = optionalBoard.orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+        if (!(board.getMember().getId() == memberId)) {
+            throw new IllegalArgumentException("잘못된 접근입니다.");
+        }
+        boardRepository.delete(board);
+        return true;
+    }
 }

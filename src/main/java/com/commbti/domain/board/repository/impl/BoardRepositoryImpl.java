@@ -59,4 +59,9 @@ public class BoardRepositoryImpl implements BoardRepository {
                 .setMaxResults(size)
                 .getResultList();
     }
+
+    @Override
+    public void delete(Board board) {
+        em.remove(board);
+    }
 }

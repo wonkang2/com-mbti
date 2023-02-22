@@ -17,4 +17,6 @@ import java.util.Optional;
 
      List<Board> findPageByMbti(Pageable pageable, MbtiType mbtiType);
 
+     void delete(Board board);
+
 }
