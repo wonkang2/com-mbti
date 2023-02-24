@@ -176,6 +176,54 @@ class BoardRepositoryImplTest {
     }
 
     @Test
+    @DisplayName("mbti별로 게시글이 페이징처리되서 조회되는지 확인1")
+    void mbti필터_게시글_목록_페이지_조회_테스트1() {
+        Member member1 = new Member();
+        member1.updateMbtiType(MbtiType.INTJ);
+        Member member2 = new Member();
+        member2.updateMbtiType(MbtiType.INTP);
+        for (int i = 0; i < 20; i+=2) {
+            boardRepository.save(
+                    Board.createBoard("테스트" + i, "테스트" + i, "/test" + i, member1));
+            boardRepository.save(
+                    Board.createBoard("테스트" + i+1, "테스트" + i+1, "/test" + i+1, member2));
+        }
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+
+        List<Board> boardList = boardRepository.findPageByMbti(pageRequest, member1.getMbtiType());
+
+
+        assertThat(boardList.size()).isEqualTo(10);
+        assertThat(boardList.get(0).getCreatedAt()).isAfter(boardList.get(1).getCreatedAt());
+        assertThat(boardList.get(0).getMember().getMbtiType()).isEqualTo(boardList.get(9).getMember().getMbtiType());
+    }
+
+    @Test
+    @DisplayName("mbti별로 게시글이 페이징처리되서 조회되는지 확인2")
+    void mbti필터_게시글_목록_페이지_조회_테스트2() {
+        Member member1 = new Member();
+        member1.updateMbtiType(MbtiType.INTJ);
+        Member member2 = new Member();
+        member2.updateMbtiType(MbtiType.INTP);
+        for (int i = 0; i < 20; i+=2) {
+            boardRepository.save(
+                    Board.createBoard("테스트" + i, "테스트" + i, "/test" + i, member1));
+            boardRepository.save(
+                    Board.createBoard("테스트" + i+1, "테스트" + i+1, "/test" + i+1, member2));
+        }
+
+        PageRequest pageRequest = PageRequest.of(1, 10);
+
+
+        List<Board> boardList = boardRepository.findPageByMbti(pageRequest, member1.getMbtiType());
+
+
+        assertThat(boardList.size()).isEqualTo(0);
+    }
+
+    @Test
     @DisplayName("삭제 확인")
     void 삭제_테스트() {
         Member member1 = new Member();
@@ -187,4 +235,29 @@ class BoardRepositoryImplTest {
         assertThat(boardRepository.findById(board1.getId())).isEmpty();
     }
 
+    @Test
+    @DisplayName("N+1 문제 확인")
+    void n_plus_1_test() {
+        Member member1 = new Member();
+        member1.updateMbtiType(MbtiType.INTJ);
+        Member member2 = new Member();
+        member2.updateMbtiType(MbtiType.INTP);
+        for (int i = 0; i < 20; i+=2) {
+            boardRepository.save(
+                    Board.createBoard("테스트" + i, "테스트" + i, "/test" + i, member1));
+            boardRepository.save(
+                    Board.createBoard("테스트" + i+1, "테스트" + i+1, "/test" + i+1, member2));
+        }
+
+        em.flush();
+        em.clear();
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        List<Board> boardList = boardRepository.findAllByPage(pageRequest);
+
+        for (Board board : boardList) {
+            board.getMember().getMbtiType();
+        }
+
+    }
 }
