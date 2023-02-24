@@ -2,11 +2,9 @@ package com.commbti.domain.board.entity;
 
 import com.commbti.domain.board.dto.BoardListResponseDto;
 import com.commbti.domain.board.dto.BoardResponseDto;
-import com.commbti.domain.member.entity.MbtiType;
 import com.commbti.domain.member.entity.Member;
 import com.commbti.global.base.DateTime;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.Optional;
@@ -21,7 +19,7 @@ public class Board extends DateTime {
     private String title;
     private String content;
     private String filePath;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
