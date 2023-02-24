@@ -3,25 +3,22 @@ package com.commbti.domain.board.repository.impl;
 import com.commbti.domain.board.entity.Board;
 import com.commbti.domain.board.repository.BoardRepository;
 import com.commbti.domain.member.entity.MbtiType;
-import com.commbti.domain.member.entity.Member;
-import org.springframework.context.annotation.EnableMBeanExport;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class BoardRepositoryImpl implements BoardRepository {
 
-    @PersistenceContext
-    private EntityManager em;
+    private final EntityManager em;
 
     @Override
     public void save(Board board) {
@@ -29,9 +26,14 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
-    @EntityGraph(attributePaths = {"member"})
     public Optional<Board> findById(Long boardId) {
-        return Optional.ofNullable(em.find(Board.class, boardId));
+        EntityGraph<Board> entityGraph = em.createEntityGraph(Board.class);
+        entityGraph.addAttributeNodes("member");
+
+        Map hints = new HashMap();
+        hints.put("javax.persistence.fetchgraph", entityGraph);
+
+        return Optional.ofNullable(em.find(Board.class, boardId, hints));
     }
 
     @Override
@@ -39,7 +41,10 @@ public class BoardRepositoryImpl implements BoardRepository {
         int page = pageable.getPageNumber();
         int size = pageable.getPageSize();
         int offset = page * size;
-        return em.createQuery("select b from Board b inner join fetch b.member m order by b.createdAt desc", Board.class)
+
+        String jpql = "select b from Board b inner join fetch b.member m order by b.createdAt desc";
+
+        return em.createQuery(jpql, Board.class)
                 .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
@@ -51,7 +56,7 @@ public class BoardRepositoryImpl implements BoardRepository {
         int size = pageable.getPageSize();
         int offset = page * size;
 
-        String jpql = "select b from Board b join b.member m where m.mbtiType= :mbtiType";
+        String jpql = "select b from Board b inner join fetch b.member m where m.mbtiType= :mbtiType order by b.createdAt desc";
 
         return em.createQuery(jpql, Board.class)
                 .setParameter("mbtiType", mbtiType)
