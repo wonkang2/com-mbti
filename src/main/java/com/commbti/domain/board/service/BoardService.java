@@ -51,7 +51,7 @@ public class BoardService {
         if (!(board.getMember().getId() == memberId)) {
             throw new IllegalArgumentException("잘못된 접근입니다.");
         }
-        String filePath = fileService.update(patchDto.getFile());
+        String filePath = fileService.update(board.getFilePath(), patchDto.getFile());
 
         board.update(patchDto.getTitle(), patchDto.getContent(), filePath);
 

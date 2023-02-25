@@ -8,7 +8,7 @@ public interface FileService {
 
     String upload(MultipartFile multipartFile);
 
-    String update(MultipartFile multipartFile);
+    String update(String filePath, MultipartFile multipartFile);
 
     void delete(String filePath);
 
