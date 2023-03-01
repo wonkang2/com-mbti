@@ -10,6 +10,7 @@ import com.commbti.domain.member.entity.Member;
 import com.commbti.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -61,6 +63,7 @@ public class CommentService {
     }
 
     // 게시글에 해당하는 댓글 조회
+    @Transactional(readOnly = true)
     public List<CommentResponseDto> findAllByBulletinId(Long bulletinId) {
         List<Comment> comments = commentRepository.findAllByBulletinId(bulletinId);
 
