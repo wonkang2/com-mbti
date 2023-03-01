@@ -41,38 +41,43 @@ public class BulletinService {
     // 게시글 수정
     @Transactional
     public Long updateBulletin(Long memberId, Long bulletinId, BulletinPatchDto patchDto) {
-        Optional<Bulletin> optionalBoard = bulletinBoardRepository.findById(bulletinId);
-        Bulletin bulletin = optionalBoard.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+        Bulletin findBulletin = getVerifiedBulletin(bulletinId);
 
-        if (!(bulletin.getMember().getId() == memberId)) {
+        if (!(findBulletin.getMember().getId() == memberId)) {
             throw new IllegalArgumentException("잘못된 접근입니다.");
         }
-        String filePath = fileService.update(bulletin.getFilePath(), patchDto.getFile());
+        String filePath = fileService.update(findBulletin.getFilePath(), patchDto.getFile());
 
-        bulletin.update(patchDto.getTitle(), patchDto.getContent(), filePath);
+        findBulletin.update(patchDto.getTitle(), patchDto.getContent(), filePath);
 
-        return bulletin.getId();
+        return findBulletin.getId();
     }
 
     // 게시글 상세 조회
     @Transactional(readOnly = true)
     public BulletinResponseDto findOne(Long bulletinId) {
-        Optional<Bulletin> optionalBoard = bulletinBoardRepository.findById(bulletinId);
-        Bulletin bulletin = optionalBoard.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+        Bulletin findBulletin = getVerifiedBulletin(bulletinId);
 
-        return bulletin.toBulletinResponseDto();
+        return findBulletin.toBulletinResponseDto();
     }
+
 
     // 게시글 삭제
     @Transactional
     public boolean deleteOne(Long memberId, Long bulletinId) {
+        Bulletin findBulletin = getVerifiedBulletin(bulletinId);
+        if (!(findBulletin.getMember().getId() == memberId)) {
+            throw new IllegalArgumentException("잘못된 접근입니다.");
+        }
+        bulletinBoardRepository.delete(findBulletin);
+        return true;
+    }
+
+    public Bulletin getVerifiedBulletin(Long bulletinId) {
         Optional<Bulletin> optionalBoard = bulletinBoardRepository.findById(bulletinId);
         Bulletin bulletin = optionalBoard.orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
-        if (!(bulletin.getMember().getId() == memberId)) {
-            throw new IllegalArgumentException("잘못된 접근입니다.");
-        }
-        bulletinBoardRepository.delete(bulletin);
-        return true;
+        return bulletin;
     }
+
 }
