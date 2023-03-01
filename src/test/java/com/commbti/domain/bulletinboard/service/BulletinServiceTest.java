@@ -1,10 +1,10 @@
-package com.commbti.domain.board.service;
+package com.commbti.domain.bulletinboard.service;
 
-import com.commbti.domain.board.dto.BoardPatchDto;
-import com.commbti.domain.board.dto.BoardPostDto;
-import com.commbti.domain.board.dto.BoardResponseDto;
-import com.commbti.domain.board.entity.Board;
-import com.commbti.domain.board.repository.BoardRepository;
+import com.commbti.domain.bulletinboard.dto.BulletinPatchDto;
+import com.commbti.domain.bulletinboard.dto.BulletinPostDto;
+import com.commbti.domain.bulletinboard.dto.BulletinResponseDto;
+import com.commbti.domain.bulletinboard.entity.Bulletin;
+import com.commbti.domain.bulletinboard.repository.BulletinBoardRepository;
 import com.commbti.domain.file.service.FileService;
 import com.commbti.domain.member.entity.MbtiType;
 import com.commbti.domain.member.entity.Member;
@@ -30,13 +30,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 
 @ExtendWith(MockitoExtension.class)
-public class PostsServiceTest {
+public class BulletinServiceTest {
 
     @InjectMocks
-    private PostsService postsService;
+    private BulletinService bulletinService;
 
     @Mock
-    private BoardRepository boardRepository;
+    private BulletinBoardRepository bulletinBoardRepository;
     @Mock
     private MemberService memberService;
     @Mock
@@ -44,34 +44,34 @@ public class PostsServiceTest {
 
     @Nested
     @DisplayName("게시글 등록")
-    class CreateBoardTest {
+    class CreateBulletinTest {
         @Test
         @DisplayName("게시글이 정상적으로 등록되는지 확인")
-        void createBoardTest() {
+        void createBulletinTest() {
             Long memberId = 1L;
             Member member = new Member();
             String title = "test";
             String content = "test";
             MockMultipartFile multipartFile = new MockMultipartFile("테스트", "text.jpg", "image/jpg", "test".getBytes());
             String filePath = "/filePath";
-            BoardPostDto boardPostDto = new BoardPostDto(title, content, multipartFile);
+            BulletinPostDto bulletinPostDto = new BulletinPostDto(title, content, multipartFile);
 
             given(memberService.findMember(memberId)).willReturn(member);
             given(fileService.upload(multipartFile)).willReturn(filePath);
-            willDoNothing().given(boardRepository).save(any());
+            willDoNothing().given(bulletinBoardRepository).save(any());
 
-            postsService.createBoard(memberId, boardPostDto);
+            bulletinService.createBulletin(memberId, bulletinPostDto);
         }
     }
 
     @Nested
     @DisplayName("게시글 수정 테스트")
-    class UpdateBoardTest {
+    class UpdateBulletinTest {
         @Test
         @DisplayName("게시글이 정상적으로 수정되는지 확인 - 제목, 내용, 이미지")
         void 모든_내용_수정_테스트() {
             Long memberId = 1L;
-            Long boardId = 1L;
+            Long bulletinId = 1L;
 
             Member member = new Member();
             ReflectionTestUtils.setField(member, "id", memberId);
@@ -79,29 +79,29 @@ public class PostsServiceTest {
             String title = "기존제목";
             String content = "기존내용";
             String filePath = "/filePath";
-            Board findBoard = Board.createBoard(title, content, filePath, member);
+            Bulletin findBulletin = Bulletin.createArticle(title, content, filePath, member);
 
             String newTitle = "수정제목";
             String newContent = "수정내용";
             MockMultipartFile newMultipartFile = new MockMultipartFile("수정이미지", "new.jpg", "image/jpg", "test".getBytes());
             String newFilePath = "/filePath";
-            BoardPatchDto boardPatchDto = new BoardPatchDto(newTitle, newContent, newMultipartFile);
+            BulletinPatchDto bulletinPatchDto = new BulletinPatchDto(newTitle, newContent, newMultipartFile);
 
-            given(boardRepository.findById(boardId)).willReturn(Optional.of(findBoard));
-            given(fileService.update(findBoard.getFilePath(), boardPatchDto.getFile())).willReturn(newFilePath);
+            given(bulletinBoardRepository.findById(bulletinId)).willReturn(Optional.of(findBulletin));
+            given(fileService.update(findBulletin.getFilePath(), bulletinPatchDto.getFile())).willReturn(newFilePath);
 
-            postsService.updateBoard(memberId, boardId, boardPatchDto);
+            bulletinService.updateBulletin(memberId, bulletinId, bulletinPatchDto);
 
-            assertThat(findBoard.getTitle()).isEqualTo(newTitle);
-            assertThat(findBoard.getContent()).isEqualTo(newContent);
-            assertThat(findBoard.getFilePath()).isEqualTo(newFilePath);
+            assertThat(findBulletin.getTitle()).isEqualTo(newTitle);
+            assertThat(findBulletin.getContent()).isEqualTo(newContent);
+            assertThat(findBulletin.getFilePath()).isEqualTo(newFilePath);
         }
 
         @Test
         @DisplayName("게시글이 정상적으로 수정되는지 확인 - 제목")
         void 제목_수정_테스트() {
             Long memberId = 1L;
-            Long boardId = 1L;
+            Long bulletin = 1L;
 
             Member member = new Member();
             ReflectionTestUtils.setField(member, "id", memberId);
@@ -109,26 +109,26 @@ public class PostsServiceTest {
             String title = "기존제목";
             String content = "기존내용";
             String filePath = "/filePath";
-            Board findBoard = Board.createBoard(title, content, filePath, member);
+            Bulletin findBulletin = Bulletin.createArticle(title, content, filePath, member);
 
             String newTitle = "수정제목";
-            BoardPatchDto boardPatchDto = new BoardPatchDto(newTitle, null, null);
+            BulletinPatchDto bulletinPatchDto = new BulletinPatchDto(newTitle, null, null);
 
-            given(boardRepository.findById(boardId)).willReturn(Optional.of(findBoard));
-            given(fileService.update(findBoard.getFilePath(), boardPatchDto.getFile())).willReturn(null);
+            given(bulletinBoardRepository.findById(bulletin)).willReturn(Optional.of(findBulletin));
+            given(fileService.update(findBulletin.getFilePath(), bulletinPatchDto.getFile())).willReturn(null);
 
-            postsService.updateBoard(memberId, boardId, boardPatchDto);
+            bulletinService.updateBulletin(memberId, bulletin, bulletinPatchDto);
 
-            assertThat(findBoard.getTitle()).isEqualTo(newTitle);
-            assertThat(findBoard.getContent()).isEqualTo(content);
-            assertThat(findBoard.getFilePath()).isEqualTo(filePath);
+            assertThat(findBulletin.getTitle()).isEqualTo(newTitle);
+            assertThat(findBulletin.getContent()).isEqualTo(content);
+            assertThat(findBulletin.getFilePath()).isEqualTo(filePath);
         }
 
         @Test
         @DisplayName("게시글이 정상적으로 수정되는지 확인 - 내용")
         void 내용_수정_테스트() {
             Long memberId = 1L;
-            Long boardId = 1L;
+            Long bulletinId = 1L;
 
             Member member = new Member();
             ReflectionTestUtils.setField(member, "id", memberId);
@@ -136,26 +136,26 @@ public class PostsServiceTest {
             String title = "기존제목";
             String content = "기존내용";
             String filePath = "/filePath";
-            Board findBoard = Board.createBoard(title, content, filePath, member);
+            Bulletin findBulletin = Bulletin.createArticle(title, content, filePath, member);
 
             String newContent = "수정내용";
-            BoardPatchDto boardPatchDto = new BoardPatchDto(null, newContent, null);
+            BulletinPatchDto bulletinPatchDto = new BulletinPatchDto(null, newContent, null);
 
-            given(boardRepository.findById(boardId)).willReturn(Optional.of(findBoard));
-            given(fileService.update(findBoard.getFilePath(), boardPatchDto.getFile())).willReturn(null);
+            given(bulletinBoardRepository.findById(bulletinId)).willReturn(Optional.of(findBulletin));
+            given(fileService.update(findBulletin.getFilePath(), bulletinPatchDto.getFile())).willReturn(null);
 
-            postsService.updateBoard(memberId, boardId, boardPatchDto);
+            bulletinService.updateBulletin(memberId, bulletinId, bulletinPatchDto);
 
-            assertThat(findBoard.getTitle()).isEqualTo(title);
-            assertThat(findBoard.getContent()).isEqualTo(newContent);
-            assertThat(findBoard.getFilePath()).isEqualTo(filePath);
+            assertThat(findBulletin.getTitle()).isEqualTo(title);
+            assertThat(findBulletin.getContent()).isEqualTo(newContent);
+            assertThat(findBulletin.getFilePath()).isEqualTo(filePath);
         }
 
         @Test
         @DisplayName("게시글이 정상적으로 수정되는지 확인 - 이미지")
         void 이미지_수정_테스트() {
             Long memberId = 1L;
-            Long boardId = 1L;
+            Long bulletinId = 1L;
 
             Member member = new Member();
             ReflectionTestUtils.setField(member, "id", memberId);
@@ -163,20 +163,20 @@ public class PostsServiceTest {
             String title = "기존제목";
             String content = "기존내용";
             String filePath = "/filePath";
-            Board findBoard = Board.createBoard(title, content, filePath, member);
+            Bulletin findBulletin = Bulletin.createArticle(title, content, filePath, member);
 
             MockMultipartFile newMultipartFile = new MockMultipartFile("수정이미지", "new.jpg", "image/jpg", "test".getBytes());
             String newFilePath = "/filePath";
-            BoardPatchDto boardPatchDto = new BoardPatchDto(null, null, newMultipartFile);
+            BulletinPatchDto bulletinPatchDto = new BulletinPatchDto(null, null, newMultipartFile);
 
-            given(boardRepository.findById(boardId)).willReturn(Optional.of(findBoard));
-            given(fileService.update(findBoard.getFilePath(), boardPatchDto.getFile())).willReturn(newFilePath);
+            given(bulletinBoardRepository.findById(bulletinId)).willReturn(Optional.of(findBulletin));
+            given(fileService.update(findBulletin.getFilePath(), bulletinPatchDto.getFile())).willReturn(newFilePath);
 
-            postsService.updateBoard(memberId, boardId, boardPatchDto);
+            bulletinService.updateBulletin(memberId, bulletinId, bulletinPatchDto);
 
-            assertThat(findBoard.getTitle()).isEqualTo(title);
-            assertThat(findBoard.getContent()).isEqualTo(content);
-            assertThat(findBoard.getFilePath()).isEqualTo(newFilePath);
+            assertThat(findBulletin.getTitle()).isEqualTo(title);
+            assertThat(findBulletin.getContent()).isEqualTo(content);
+            assertThat(findBulletin.getFilePath()).isEqualTo(newFilePath);
         }
 
         @Test
@@ -184,7 +184,7 @@ public class PostsServiceTest {
         void 권한없는_유저_수정_테스트() {
             Long memberId = 1L;
             Long fakeMemberId = 100L;
-            Long boardId = 1L;
+            Long bulletinId = 1L;
 
             Member member = new Member();
             ReflectionTestUtils.setField(member, "id", memberId);
@@ -192,39 +192,39 @@ public class PostsServiceTest {
             String title = "기존제목";
             String content = "기존내용";
             String filePath = "/filePath";
-            Board findBoard = Board.createBoard(title, content, filePath, member);
+            Bulletin findBulletin = Bulletin.createArticle(title, content, filePath, member);
 
             String newTitle = "수정제목";
             String newContent = "수정내용";
             MockMultipartFile newMultipartFile = new MockMultipartFile("수정이미지", "new.jpg", "image/jpg", "test".getBytes());
             String newFilePath = "/filePath";
-            BoardPatchDto boardPatchDto = new BoardPatchDto(newTitle, newContent, newMultipartFile);
+            BulletinPatchDto bulletinPatchDto = new BulletinPatchDto(newTitle, newContent, newMultipartFile);
 
-            given(boardRepository.findById(boardId)).willReturn(Optional.of(findBoard));
+            given(bulletinBoardRepository.findById(bulletinId)).willReturn(Optional.of(findBulletin));
 
             Assertions.assertThatThrownBy(
-                            () -> postsService.updateBoard(fakeMemberId, boardId, boardPatchDto))
+                            () -> bulletinService.updateBulletin(fakeMemberId, bulletinId, bulletinPatchDto))
                     .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("잘못된 접근입니다.");
         }
 
         @Test
         @DisplayName("존재하지 않는 게시글을 수정 요청하였을 때 예외가 발생하는지 확인")
         void 존재하지_않는_게시글_수정_테스트() {
-            Long fakeBoardId = 100L;
+            Long fakeBulletinId = 100L;
             Long fakeMemberId = 100L;
 
-            BoardPatchDto fakeBoardPatchDto = new BoardPatchDto(null, null, null);
-            given(boardRepository.findById(fakeBoardId)).willReturn(Optional.ofNullable(null));
+            BulletinPatchDto fakeBulletinPatchDto = new BulletinPatchDto(null, null, null);
+            given(bulletinBoardRepository.findById(fakeBulletinId)).willReturn(Optional.ofNullable(null));
 
             Assertions.assertThatThrownBy(
-                            () -> postsService.updateBoard(fakeMemberId, fakeBoardId, fakeBoardPatchDto))
+                            () -> bulletinService.updateBulletin(fakeMemberId, fakeBulletinId, fakeBulletinPatchDto))
                     .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("해당 게시글이 존재하지 않습니다.");
         }
     }
 
     @Nested
     @DisplayName("게시물 조회 테스트")
-    class FindBoardTest {
+    class FindBulletinTest {
 
         @DisplayName("게시글을 조회하였을 때 제대로 조회되는지 확인")
         @Test
@@ -236,40 +236,40 @@ public class PostsServiceTest {
             ReflectionTestUtils.setField(member, "nickname", nickname);
             member.updateMbtiType(MbtiType.INTJ);
 
-            Long boardId = 1L;
-            Board savedBoard = Board.createBoard("테스트제목", "테스트내용", "/test.jpg", member);
+            Long bulletinId = 1L;
+            Bulletin savedBulletin = Bulletin.createArticle("테스트제목", "테스트내용", "/test.jpg", member);
             LocalDateTime createdAt = LocalDateTime.now();
-            ReflectionTestUtils.setField(savedBoard, "createdAt", createdAt);
+            ReflectionTestUtils.setField(savedBulletin, "createdAt", createdAt);
 
-            given(boardRepository.findById(boardId)).willReturn(Optional.of(savedBoard));
+            given(bulletinBoardRepository.findById(bulletinId)).willReturn(Optional.of(savedBulletin));
 
-            BoardResponseDto result = postsService.findBoard(boardId);
+            BulletinResponseDto result = bulletinService.findOne(bulletinId);
 
-            assertThat(result.getTitle()).isEqualTo(savedBoard.getTitle());
-            assertThat(result.getContent()).isEqualTo(savedBoard.getContent());
-            assertThat(result.getFilePath()).isEqualTo(savedBoard.getFilePath());
-            assertThat(result.getNickname()).isEqualTo(savedBoard.getMember().getNickname());
-            assertThat(result.getMbtiType()).isEqualTo(savedBoard.getMember().getMbtiType());
-            assertThat(result.getCreatedAt()).isEqualTo(savedBoard.getCreatedAt());
+            assertThat(result.getTitle()).isEqualTo(savedBulletin.getTitle());
+            assertThat(result.getContent()).isEqualTo(savedBulletin.getContent());
+            assertThat(result.getFilePath()).isEqualTo(savedBulletin.getFilePath());
+            assertThat(result.getNickname()).isEqualTo(savedBulletin.getMember().getNickname());
+            assertThat(result.getMbtiType()).isEqualTo(savedBulletin.getMember().getMbtiType());
+            assertThat(result.getCreatedAt()).isEqualTo(savedBulletin.getCreatedAt());
         }
 
         @DisplayName("존재하지 않는 게시글을 조회하였을 때 예외가 발생하는지 확인")
         @Test
         void 존재하지_않는_게시물_조회_테스트() {
-            Long boardId = 1L;
+            Long bulletinId = 1L;
 
-            given(boardRepository.findById(boardId)).willReturn(Optional.ofNullable(null));
+            given(bulletinBoardRepository.findById(bulletinId)).willReturn(Optional.ofNullable(null));
 
 
             assertThatThrownBy(() -> {
-                postsService.findBoard(boardId);
+                bulletinService.findOne(bulletinId);
             }).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("존재하지 않는 게시글입니다.");
         }
     }
 
     @Nested
     @DisplayName("게시물 삭제 테스트")
-    class DeleteBoardTest {
+    class DeleteBulletinTest {
 
         @Test
         @DisplayName("게시물이 정상적으로 삭제되는지 확인")
@@ -278,13 +278,13 @@ public class PostsServiceTest {
             Member member = new Member();
             ReflectionTestUtils.setField(member, "id", memberId);
 
-            Long boardId = 1L;
-            Board savedBoard = Board.createBoard("테스트제목", "테스트내용", "/test.jpg", member);
+            Long bulletinId = 1L;
+            Bulletin savedBulletin = Bulletin.createArticle("테스트제목", "테스트내용", "/test.jpg", member);
 
-            given(boardRepository.findById(boardId)).willReturn(Optional.of(savedBoard));
-            willDoNothing().given(boardRepository).delete(savedBoard);
+            given(bulletinBoardRepository.findById(bulletinId)).willReturn(Optional.of(savedBulletin));
+            willDoNothing().given(bulletinBoardRepository).delete(savedBulletin);
 
-            boolean result = postsService.deleteBoard(memberId, boardId);
+            boolean result = bulletinService.deleteOne(memberId, bulletinId);
 
             assertThat(result).isTrue();
         }
@@ -292,11 +292,11 @@ public class PostsServiceTest {
         @DisplayName("존재하지 않는 게시물을 삭제 요청하였을 때 예외가 발생하는지 확인")
         void 존재하지_않는_게시물_삭제_테스트() {
             Long memberId = 1L;
-            Long fakeBoardId = 100L;
-            given(boardRepository.findById(fakeBoardId)).willReturn(Optional.ofNullable(null));
+            Long fakeBulletinId = 100L;
+            given(bulletinBoardRepository.findById(fakeBulletinId)).willReturn(Optional.ofNullable(null));
 
             assertThatThrownBy(() -> {
-                postsService.deleteBoard(memberId, fakeBoardId);
+                bulletinService.deleteOne(memberId, fakeBulletinId);
             }).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("존재하지 않는 게시글입니다.");
         }
         @Test
@@ -307,13 +307,13 @@ public class PostsServiceTest {
             Member member = new Member();
             ReflectionTestUtils.setField(member, "id", memberId);
 
-            Long boardId = 1L;
-            Board savedBoard = Board.createBoard("테스트제목", "테스트내용", "/test.jpg", member);
+            Long bulletinId = 1L;
+            Bulletin savedBulletin = Bulletin.createArticle("테스트제목", "테스트내용", "/test.jpg", member);
 
-            given(boardRepository.findById(boardId)).willReturn(Optional.of(savedBoard));
+            given(bulletinBoardRepository.findById(bulletinId)).willReturn(Optional.of(savedBulletin));
 
             assertThatThrownBy(() -> {
-                postsService.deleteBoard(fakeMemberId, boardId);
+                bulletinService.deleteOne(fakeMemberId, bulletinId);
             }).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("잘못된 접근입니다.");
         }
     }

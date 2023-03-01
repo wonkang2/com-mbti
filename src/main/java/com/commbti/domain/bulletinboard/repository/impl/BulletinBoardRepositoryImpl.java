@@ -1,7 +1,7 @@
-package com.commbti.domain.board.repository.impl;
+package com.commbti.domain.bulletinboard.repository.impl;
 
-import com.commbti.domain.board.entity.Board;
-import com.commbti.domain.board.repository.BoardRepository;
+import com.commbti.domain.bulletinboard.entity.Bulletin;
+import com.commbti.domain.bulletinboard.repository.BulletinBoardRepository;
 import com.commbti.domain.member.entity.MbtiType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,49 +16,49 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class BoardRepositoryImpl implements BoardRepository {
+public class BulletinBoardRepositoryImpl implements BulletinBoardRepository {
 
     private final EntityManager em;
 
     @Override
-    public void save(Board board) {
-        em.persist(board);
+    public void save(Bulletin bulletin) {
+        em.persist(bulletin);
     }
 
     @Override
-    public Optional<Board> findById(Long boardId) {
-        EntityGraph<Board> entityGraph = em.createEntityGraph(Board.class);
+    public Optional<Bulletin> findById(Long id) {
+        EntityGraph<Bulletin> entityGraph = em.createEntityGraph(Bulletin.class);
         entityGraph.addAttributeNodes("member");
 
         Map hints = new HashMap();
         hints.put("javax.persistence.fetchgraph", entityGraph);
 
-        return Optional.ofNullable(em.find(Board.class, boardId, hints));
+        return Optional.ofNullable(em.find(Bulletin.class, id, hints));
     }
 
     @Override
-    public List<Board> findAllByPage(Pageable pageable) {
+    public List<Bulletin> findAllByPage(Pageable pageable) {
         int page = pageable.getPageNumber();
         int size = pageable.getPageSize();
         int offset = page * size;
 
-        String jpql = "select b from Board b inner join fetch b.member m order by b.createdAt desc";
+        String jpql = "select b from Bulletin b inner join fetch b.member m order by b.createdAt desc";
 
-        return em.createQuery(jpql, Board.class)
+        return em.createQuery(jpql, Bulletin.class)
                 .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
     }
 
     @Override
-    public List<Board> findPageByMbti(Pageable pageable, MbtiType mbtiType) {
+    public List<Bulletin> findPageByMbti(Pageable pageable, MbtiType mbtiType) {
         int page = pageable.getPageNumber();
         int size = pageable.getPageSize();
         int offset = page * size;
 
-        String jpql = "select b from Board b inner join fetch b.member m where m.mbtiType= :mbtiType order by b.createdAt desc";
+        String jpql = "select b from Bulletin b inner join fetch b.member m where m.mbtiType= :mbtiType order by b.createdAt desc";
 
-        return em.createQuery(jpql, Board.class)
+        return em.createQuery(jpql, Bulletin.class)
                 .setParameter("mbtiType", mbtiType)
                 .setFirstResult(offset)
                 .setMaxResults(size)
@@ -66,7 +66,7 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
-    public void delete(Board board) {
-        em.remove(board);
+    public void delete(Bulletin bulletin) {
+        em.remove(bulletin);
     }
 }

@@ -1,18 +1,18 @@
-package com.commbti.domain.board.dto;
+package com.commbti.domain.bulletinboard.dto;
 
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
-public class BoardPostDto {
+public class BulletinPostDto {
     private String title;
     private String content;
     private MultipartFile file;
 
-    private BoardPostDto() {
+    private BulletinPostDto() {
     }
 
-    public BoardPostDto(String title, String content, MultipartFile file) {
+    public BulletinPostDto(String title, String content, MultipartFile file) {
         this.title = title;
         this.content = content;
         this.file = file;

@@ -1,7 +1,7 @@
-package com.commbti.domain.board.entity;
+package com.commbti.domain.bulletinboard.entity;
 
-import com.commbti.domain.board.dto.BoardListResponseDto;
-import com.commbti.domain.board.dto.BoardResponseDto;
+import com.commbti.domain.bulletinboard.dto.BoardResponseDto;
+import com.commbti.domain.bulletinboard.dto.BulletinResponseDto;
 import com.commbti.domain.member.entity.Member;
 import com.commbti.global.base.DateTime;
 import lombok.Getter;
@@ -11,10 +11,10 @@ import java.util.Optional;
 
 @Entity
 @Getter
-public class Board extends DateTime {
+public class Bulletin extends DateTime {
 
     @Id @GeneratedValue
-    @Column(name = "board_id")
+    @Column(name = "article_id")
     private Long id;
     private String title;
     private String content;
@@ -23,18 +23,18 @@ public class Board extends DateTime {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    protected Board() {
+    protected Bulletin() {
     }
 
-    private Board(String title, String content, String filePath, Member member) {
+    private Bulletin(String title, String content, String filePath, Member member) {
         this.title = title;
         this.filePath = filePath;
         this.content = content;
         this.member = member;
     }
 
-    public static Board createBoard(String title, String content, String filePath, Member member) {
-        return new Board(title, content, filePath, member);
+    public static Bulletin createArticle(String title, String content, String filePath, Member member) {
+        return new Bulletin(title, content, filePath, member);
     }
 
     public void update(String optionalTitle, String optionalContent, String optionalFilePath) {
@@ -47,8 +47,8 @@ public class Board extends DateTime {
     }
 
     /* --------------------------- toDto --------------------------- */
-    public BoardListResponseDto toListResponseDto() {
-        return BoardListResponseDto.builder()
+    public BoardResponseDto toBoardResponseDto() {
+        return BoardResponseDto.builder()
                 .id(this.id)
                 .title(this.title)
                 .username(this.member.getNickname())
@@ -56,8 +56,8 @@ public class Board extends DateTime {
                 .createdAt(super.getCreatedAt()).build();
     }
 
-    public BoardResponseDto toResponseDto() {
-        return BoardResponseDto.builder()
+    public BulletinResponseDto toBulletinResponseDto() {
+        return BulletinResponseDto.builder()
                 .content(this.content)
                 .title(this.title)
                 .filePath(this.filePath)

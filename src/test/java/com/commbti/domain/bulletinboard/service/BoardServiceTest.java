@@ -1,12 +1,10 @@
-package com.commbti.domain.board.service;
+package com.commbti.domain.bulletinboard.service;
 
-import com.commbti.domain.board.dto.BoardListResponseDto;
-import com.commbti.domain.board.entity.Board;
-import com.commbti.domain.board.repository.BoardRepository;
-import com.commbti.domain.file.service.FileService;
+import com.commbti.domain.bulletinboard.dto.BoardResponseDto;
+import com.commbti.domain.bulletinboard.entity.Bulletin;
+import com.commbti.domain.bulletinboard.repository.BulletinBoardRepository;
 import com.commbti.domain.member.entity.MbtiType;
 import com.commbti.domain.member.entity.Member;
-import com.commbti.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,16 +23,16 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class NoticeBoardServiceTest {
+public class BoardServiceTest {
 
     @InjectMocks
-    private NoticeBoardService noticeBoardService;
+    private BoardService boardService;
     @Mock
-    private BoardRepository boardRepository;
+    private BulletinBoardRepository bulletinBoardRepository;
 
     @Nested
     @DisplayName("게시글 목록 페이지 조회")
-    class FindBoardListTest {
+    class FindBulletinListTest {
         @Test
         @DisplayName("게시글 목록 조회가 정상적으로 동작하는지 확인")
         void 게시글_목록_정상_조회_테스트() {
@@ -47,17 +45,17 @@ public class NoticeBoardServiceTest {
             ReflectionTestUtils.setField(member1, "id", memberId1);
             ReflectionTestUtils.setField(member2, "id", memberId2);
 
-            Board board1 = Board.createBoard("테스트제목1", "테스트내용1", "/test1.jpg", member1);
-            Board board2 = Board.createBoard("테스트제목2", "테스트내용2", "/test2.jpg", member2);
+            Bulletin bulletin1 = Bulletin.createArticle("테스트제목1", "테스트내용1", "/test1.jpg", member1);
+            Bulletin bulletin2 = Bulletin.createArticle("테스트제목2", "테스트내용2", "/test2.jpg", member2);
 
-            List<Board> boardList = List.of(board1, board2);
+            List<Bulletin> bulletinList = List.of(bulletin1, bulletin2);
 
             int page = 1;
             int size = 2;
 
-            given(boardRepository.findAllByPage(any())).willReturn(boardList);
+            given(bulletinBoardRepository.findAllByPage(any())).willReturn(bulletinList);
 
-            List<BoardListResponseDto> result = noticeBoardService.findBoardListPage(page, size);
+            List<BoardResponseDto> result = boardService.findBoardListPage(page, size);
             assertThat(result.size()).isEqualTo(size);
         }
 
@@ -65,15 +63,15 @@ public class NoticeBoardServiceTest {
         @DisplayName("게시글이 존재하지 않을 때 목록을 요청했을 때 확인")
         void 게시글_목록_조회_존재x_테스트() {
 
-            List<Board> boardList = new ArrayList<>();
+            List<Bulletin> bulletinList = new ArrayList<>();
 
             int page = 1;
             int size = 10;
 
-            given(boardRepository.findAllByPage(any())).willReturn(boardList);
+            given(bulletinBoardRepository.findAllByPage(any())).willReturn(bulletinList);
 
 
-            List<BoardListResponseDto> result = noticeBoardService.findBoardListPage(page, size);
+            List<BoardResponseDto> result = boardService.findBoardListPage(page, size);
 
 
             assertThat(result.size()).isEqualTo(0);
@@ -82,7 +80,7 @@ public class NoticeBoardServiceTest {
 
     @Nested
     @DisplayName("MBTI별 게시글 목록 조회 테스트")
-    class FindBoardListByMbti {
+    class FindBulletinListByMbti {
         @Test
         @DisplayName("게시글 목록 조회가 정상적으로 동작하는지 확인")
         void MBTI별_게시글_목록_조회_테스트() {
@@ -102,36 +100,36 @@ public class NoticeBoardServiceTest {
             member2.updateMbtiType(MbtiType.INTJ);
             member3.updateMbtiType(MbtiType.INTJ);
 
-            Board board1 = Board.createBoard("테스트1", "테스트1", "테스트1", member1);
-            Board board2 = Board.createBoard("테스트2", "테스트1", "테스트1", member1);
-            Board board3 = Board.createBoard("테스트3", "테스트1", "테스트1", member2);
-            Board board4 = Board.createBoard("테스트4", "테스트1", "테스트1", member3);
+            Bulletin bulletin1 = Bulletin.createArticle("테스트1", "테스트1", "테스트1", member1);
+            Bulletin bulletin2 = Bulletin.createArticle("테스트2", "테스트1", "테스트1", member1);
+            Bulletin bulletin3 = Bulletin.createArticle("테스트3", "테스트1", "테스트1", member2);
+            Bulletin bulletin4 = Bulletin.createArticle("테스트4", "테스트1", "테스트1", member3);
 
-            List<Board> boardList = List.of(board1, board2, board3, board4);
+            List<Bulletin> bulletinList = List.of(bulletin1, bulletin2, bulletin3, bulletin4);
 
             int page = 1;
             int size = 10;
             MbtiType mbtiType = member1.getMbtiType();
-            given(boardRepository.findPageByMbti(any(), eq(mbtiType))).willReturn(boardList);
+            given(bulletinBoardRepository.findPageByMbti(any(), eq(mbtiType))).willReturn(bulletinList);
 
-            List<BoardListResponseDto> result = noticeBoardService.findBoardListPageByMbit(page, size, mbtiType);
+            List<BoardResponseDto> result = boardService.findBoardListPageByMbit(page, size, mbtiType);
 
-            assertThat(result.size()).isEqualTo(boardList.size());
+            assertThat(result.size()).isEqualTo(bulletinList.size());
         }
         @Test
         @DisplayName("목록 결과가 존재하지 않을 때 조회가 안되는지 확인")
         void MBTI별_게시글_목록_조회_존재x_테스트() {
 
-            List<Board> boardList = new ArrayList<>();
+            List<Bulletin> bulletinList = new ArrayList<>();
 
             int page = 1;
             int size = 10;
 
-            given(boardRepository.findPageByMbti(any(), any())).willReturn(boardList);
+            given(bulletinBoardRepository.findPageByMbti(any(), any())).willReturn(bulletinList);
 
-            List<BoardListResponseDto> result = noticeBoardService.findBoardListPageByMbit(page, size, MbtiType.ENFJ);
+            List<BoardResponseDto> result = boardService.findBoardListPageByMbit(page, size, MbtiType.ENFJ);
 
-            assertThat(result.size()).isEqualTo(boardList.size());
+            assertThat(result.size()).isEqualTo(bulletinList.size());
         }
     }
 }
