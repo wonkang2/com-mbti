@@ -10,12 +10,16 @@ import javax.persistence.*;
 @Getter
 public class Member extends DateTime {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
     private String email;
+    private String userId;
     private String password;
-    private String nickname;
     @Enumerated(value = EnumType.STRING)
     private MbtiType mbtiType;
+
+    public void updateMbtiType(MbtiType mbtiType) {
+        this.mbtiType = mbtiType;
+    }
 }
