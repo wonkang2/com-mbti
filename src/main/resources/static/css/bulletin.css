@@ -1,0 +1,222 @@
+/** 공통 요소 **/
+
+/* mbti 공통 요소  */
+.content__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+  height: 100%;
+}
+
+.bulletin__mbti {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  background-color: yellowgreen;
+  padding: 0px 10px;
+  border-radius: 5px;
+  margin-right: 15px;
+
+  font-size: 15px;
+  font-weight: 500;
+  color: white;
+}
+
+/* 시간 공통 요소 */
+.bulletin__time {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 15px;
+  margin: 0px 5px;
+  height: 100%;
+}
+
+.fa-solid {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #696969;
+}
+
+.bulletin__time__detail {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: center;
+  
+  font-size: 15px;
+  margin-left: 5px;
+  color: #696969;
+}
+
+/* 뷰 카운트 요소 */
+.bulletin__view {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  font-size: 15px;
+}
+
+.bulletin__view__detail {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: end;
+  font-size: 15px;
+  margin-left: 5px;
+}
+
+/** 개별 요소 **/
+.section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.section__header {
+
+}
+
+.section__article {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.section__article__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.section__article__body__header {
+  font-size: 20px;
+  margin: 15px 0px;
+  font-weight: 600;
+}
+
+.section__article__body__article {
+  font-size: 14px;
+  line-height: 2.5;
+}
+
+.section__article__header__footer {
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+}
+
+
+.section__footer {
+  margin-top: 20px;
+}
+
+.section__footer__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.section__footer__form__inp {
+  
+  width: 100%;
+}
+
+.footer__form__inp__detail {
+  width: 100%;
+  border: 1px solid #445566;
+  resize: none;
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+.footer__form__inp__detail:hover {
+  width: 100%;
+  border: 1px solid #445566;
+  resize: none;
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+.section__footer__form__butn {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+.footer__form__butn__detail {
+  border: 1px solid #445566;
+  background-color: white;
+  border-radius: 10px;
+  color: 445566;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.footer__form__butn__detail:hover {
+  background-color: #445566;
+  color: white;
+  cursor: pointer;
+}
+
+.section__footer__comment {
+  display: flex;
+  flex-direction: column;
+}
+
+.section__footer__comment__count {
+  margin-top: 15px;
+  font-size: 15px;
+  display: flex;
+  flex-direction: row;
+  color: #696969;
+}
+
+.comment__count__detail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  font-size: 15px;
+
+  margin-left: 5px;
+  
+}
+
+.section__footer__comment__wrapper {
+ padding: 0;
+ list-style: none; 
+ display: flex;
+ flex-direction: column;
+ 
+}
+
+.comment__wrapper__detail {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0px;
+  border-bottom: 1px dotted gray;
+}
+
+.comment__wrapper__detail__info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+  height: 100%;
+}
+.comment__wrapper__detail__body {
+  font-size: 14px;
+  line-height: 1.5;
+}
