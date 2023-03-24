@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/boards.css">
+    <link rel="stylesheet" href="/static/css/header.css">
+    <link rel="stylesheet" href="/static/css/layout.css">
+    <title>ComMBTI</title>
+    <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <header class="header">
+        <div class="header__title">
+            <a class="header__title__link" href="./boards.html">
+                <h1 class="header__title__link__text">ComMBTI</h1>
+            </a>
+        </div>
+        <div class="header__auth">
+            <div class="header__auth__login">
+                <a href="" class="header__auth__link">로그인</a>
+            </div>
+            <div class="header__auth__signup">
+                <a href="" class="header__auth__link">회원가입</a>
+            </div>
+        </div>
+    </header>
+
+
+    <section class="section">
+        <header class="section__header">게시판의 헤더부분
+            <div class="header__post">
+                <a href="./registration.html" class="header__post__button">등록하기</a>
+            </div>
+        </header>
+        <article class="section__body">
+            <ul class="section__body__wrapper">
+                <li class="section__body__wrapper__content">
+                    <div class="body__wrapper__content__left">
+                        <a href="">
+                            <img src="../../static/images/no-image-icon-23485.png" alt="사진">
+                        </a>
+                    </div>
+
+                    <div class="body__wrapper__content__right">
+                        <div class="content__right__top">
+                            INTJ
+                        </div>
+                        <div class="content__right__middle">
+                            <a href="./bulletin.html" class="content__right__middle__header">제목</a>
+                            <a href="./bulletin.html" class="content__right__middle__body">안녕하세요 c언어 공부하고 있는 학생입니다! 다름이
+                                아니라 여러 내용들을 공부하면서 postfix와 prefix의 계산 방식을 이해했다고 생각했는데 책에 나와있는 코드를 살짝 변형해서 작성하던 중 예상했던
+                                값과는 결과가 달라서 구체적으로 알아보고자 예제를 작성해서 비교해보니 </a>
+                        </div>
+                        <div class="content__right__bottom">
+                            <div class="content__right__bottom__detail">
+                                <i class="fa-solid fa-eye"></i>1
+                            </div>
+                            <div class="content__right__bottom__detail">
+                                <i class="fa-solid fa-comment"></i>4
+                            </div>
+                            <div class="content__right__bottom__detail">
+                                <i class="fa-solid fa-thumbs-up"></i>5
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </article>
+        <footer class="section__footer"></footer>
+    </section>
+
+</body>
+
+</html>
