@@ -5,6 +5,7 @@ import com.commbti.domain.bulletinboard.dto.BulletinResponseDto;
 import com.commbti.domain.member.entity.Member;
 import com.commbti.global.base.DateTime;
 import lombok.Getter;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.Optional;
@@ -13,12 +14,17 @@ import java.util.Optional;
 @Getter
 public class Bulletin extends DateTime {
 
-    @Id @GeneratedValue
-    @Column(name = "article_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "bulletin_id")
     private Long id;
     private String title;
     private String content;
-    private String filePath;
+    private String thumbnailPath;
+    private Long viewCount;
+
+    @Formula("(select count(1) from Comment c where c.bulletin_id = bulletin_id)")
+    private Long commentCount;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -26,44 +32,48 @@ public class Bulletin extends DateTime {
     protected Bulletin() {
     }
 
-    private Bulletin(String title, String content, String filePath, Member member) {
+    private Bulletin(String title, String content, Member member) {
         this.title = title;
-        this.filePath = filePath;
         this.content = content;
         this.member = member;
     }
 
-    public static Bulletin createArticle(String title, String content, String filePath, Member member) {
-        return new Bulletin(title, content, filePath, member);
+    public static Bulletin createArticle(String title, String content, Member member) {
+        return new Bulletin(title, content, member);
     }
 
-    public void update(String optionalTitle, String optionalContent, String optionalFilePath) {
+    public void update(String optionalTitle, String optionalContent) {
         Optional.ofNullable(optionalTitle)
                 .ifPresent(title -> this.title = title);
         Optional.ofNullable(optionalContent)
                 .ifPresent(content -> this.content = content);
-        Optional.ofNullable(optionalFilePath)
-                .ifPresent(filePath -> this.filePath = filePath);
     }
+
+    public void addViewCount() {
+        this.viewCount ++;
+    }
+
 
     /* --------------------------- toDto --------------------------- */
-    public BoardResponseDto toBoardResponseDto() {
-        return BoardResponseDto.builder()
-                .id(this.id)
-                .title(this.title)
-                .username(this.member.getNickname())
-                .mbtiType(this.member.getMbtiType())
-                .createdAt(super.getCreatedAt()).build();
-    }
-
     public BulletinResponseDto toBulletinResponseDto() {
         return BulletinResponseDto.builder()
                 .content(this.content)
                 .title(this.title)
-                .filePath(this.filePath)
-                .nickname(member.getNickname())
                 .mbtiType(member.getMbtiType())
                 .createdAt(super.getCreatedAt())
+                .build();
+    }
+
+    public BoardResponseDto toBoardResponseDto() {
+        return BoardResponseDto.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .mbtiType(this.member.getMbtiType())
+                .createdAt(this.getCreatedAt())
+                .viewCount(this.viewCount)
+                .commentCount(this.commentCount)
+                .thumbnailPath(this.thumbnailPath)
                 .build();
     }
 }
