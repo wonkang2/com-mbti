@@ -1,22 +1,15 @@
- package com.commbti.domain.bulletinboard.repository;
+package com.commbti.domain.bulletinboard.repository;
 
 import com.commbti.domain.bulletinboard.entity.Bulletin;
-import com.commbti.domain.member.entity.MbtiType;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-import java.util.Optional;
 
- public interface BulletinBoardRepository {
+public interface BulletinBoardRepository extends JpaRepository<Bulletin, Long> {
 
-    void save(Bulletin bulletin);
-
-    Optional<Bulletin> findById(Long id);
-
-     List<Bulletin> findAllByPage(Pageable page);
-
-     List<Bulletin> findPageByMbti(Pageable pageable, MbtiType mbtiType);
-
-     void delete(Bulletin bulletin);
-
+    @Query(value = "SELECT b FROM Bulletin b JOIN FETCH b.member",
+            countQuery = "SELECT count(b) FROM Bulletin b")
+    Page<Bulletin> findPageWithMemberMbti(Pageable pageable);
 }
