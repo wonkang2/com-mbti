@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/board.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <title>ComMBTI</title>
+    <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <header th:replace="~{common/header :: header}">
+        페이지의 헤더 부분
+    </header>
+
+
+    <section class="section">
+        <header class="section__header">게시판의 헤더부분
+            <div class="header__post">
+                <a th:href="'/bulletin-board/bulletins/post'" class="header__post__button">등록하기</a>
+            </div>
+        </header>
+        <article class="section__body">
+            <ul class="section__body__wrapper">
+                <li th:each="board: ${boardList}" class="section__body__wrapper__content">
+                    <div class="body__wrapper__content__left">
+                        <a th:href="'/bulletin-board/bulletins/' + ${board.id}">
+                            <img th:src="@{/images/no-image-icon.png}" th:if="${board.thumbnailPath == null}" alt="사진">
+                            <img th:src="@{''} + ${board.thumbnailPath}" th:unless="${board.thumbnailPath == null}" alt="사진">
+                        </a>
+                    </div>
+
+                    <div class="body__wrapper__content__right">
+                        <div th:text="${board.mbtiType} "class="content__right__top">
+                            (작성자의 MBTI) INTJ
+                        </div>
+                        <div class="content__right__middle">
+                            <a th:text="${board.title}" th:href="'/bulletin-board/bulletins/' + ${board.id}" class="content__right__middle__header">게시글_제목</a>
+                            <a th:text="${board.content}" th:href="'/bulletin-board/bulletins/' + ${board.id}" href="./bulletin.html" class="content__right__middle__body">게시글_본문</a>
+                        </div>
+                        <div class="content__right__bottom">
+                            <div class="content__right__bottom__detail">
+                                <i class="fa-solid fa-eye"></i>
+                                <div th:text="${board.viewCount}" class="comment__count__detail">(조회수) 5</div>
+                            </div>
+                            <div class="content__right__bottom__detail">
+                                <i class="fa-solid fa-comment"></i>
+                                <div th:text="${board.commentCount}" class="comment__count__detail">(댓글) 4</div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </article>
+        <footer class="section__footer"></footer>
+    </section>
+
+</body>
+
+</html>
