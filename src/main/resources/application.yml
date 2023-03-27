@@ -7,9 +7,21 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
 
 logging:
   level:
+    com.commbti: trace
     org.hibernate.sql: debug
-    org.hibernate.type: trace
+
+myapp:
+  image:
+    localUploadPath: ${localUploadPath}
