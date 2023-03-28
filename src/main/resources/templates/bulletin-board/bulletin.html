@@ -3,147 +3,132 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/css/bulletin.css">
-    <link rel="stylesheet" href="/static/css/header.css">
-    <link rel="stylesheet" href="/static/css/layout.css">
+    <link rel="stylesheet" href="/css/bulletin-board/bulletin.css">
+    <link rel="stylesheet" href="/css/common/header.css">
+    <link rel="stylesheet" href="/css/common/page.css">
+    <link rel="stylesheet" href="/css/common/layout.css">
     <title>ComMBTI</title>
 
     <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <header class="header">
-        <div class="header__title">
-            <a class="header__title__link" href="./boards.html">
-                <h1 class="header__title__link__text">ComMBTI</h1>
-            </a>
-        </div>
-        <div class="header__auth">
-            <div class="header__auth__login">
-                <a href="" class="header__auth__link">로그인</a>
-            </div>
-            <div class="header__auth__signup">
-                <a href="" class="header__auth__link">회원가입</a>
-            </div>
-        </div>
+<header th:replace="/common/header :: header">
+    게시판 헤더 부분
+</header>
+
+
+<section class="section">
+    <header class="section__header">
+        <!-- 광고 부분 -->
     </header>
+    <article class="section__article">
+        <div class="content__header">
+            <div class="content__header__left"></div>
+            <div class="content__header__right">
+                해당 게시글을 작성한 유저: 수정하기 삭제하기
+                해당 게시글을 작성하지 않은 유저: 신고하기
+            </div>
+            <div th:text="${bulletin.mbtiType}" class="bulletin__mbti">
+                INTJ
+            </div>
+            <div class="bulletin__time">
+                <i class="fa-solid fa-clock"></i>
+                <div class="bulletin__time__detail">10분전</div>
+            </div>
+            <div class="bulletin__view">
+                <i class="fa-solid fa-eye"></i>
+                <div th:text="${bulletin.viewCount}" class="bulletin__view__detail">5</div>
+            </div>
+        </div>
 
-
-    <section class="section">
-        <header class="section__header">
-            <!-- 광고 부분 -->
-        </header>
-        <article class="section__article">
-            <div class="content__header">
-                <div class="bulletin__mbti">
-                    INTJ
+        <div class="section__article__body">
+            <div th:text="${bulletin.title}" class="article__body__title">
+                게시글 제목
+            </div>
+            <div class="article__body__content">
+                <div th:if="${not #lists.isEmpty(bulletin.getFilePathList())}"
+                     th:each="filePath: ${bulletin.getFilePathList()}" class="article__body__content__image">
+                    <img class="body__content__image__detail" th:src="@{''} + ${filePath}"/>
                 </div>
-                <div class="bulletin__time">
-                    <i class="fa-solid fa-clock"></i>
-                    <div class="bulletin__time__detail">10분전</div>
-                </div>
-                <div class="bulletin__view">
-                    <i class="fa-solid fa-eye"></i>
-                    <div class="bulletin__view__detail">5</div>
-                </div>
+                <div th:text="${bulletin.content}" class="article__body__content__text">게시글 본문</div>
             </div>
 
-            <div class="section__article__body">
-                <div class="section__article__body__header">
-                    별헤는밤 - 윤동주
-                </div>
-                <div class="section__article__body__article">
-                    계절이 지나가는 하늘에는
-가을로 가득 차 있습니다.
-
-나는 아무 걱정도 없이
-가을 속의 별들을 다 헤일 듯합니다.
-
-가슴 속에 하나 둘 새겨지는 별을
-이제 다 못 헤는 것은
-쉬이 아침이 오는 까닭이요,
-내일 밤이 남은 까닭이요,
-아직 나의 청춘이 다하지 않은 까닭입니다.
-
-별 하나에 추억과
-별 하나에 사랑과
-별 하나에 쓸쓸함과
-별 하나에 동경과
-별 하나에 시와
-별 하나에 어머니, 어머니,
-
-어머님, 나는 별 하나에 아름다운 말 한마디씩 불러 봅니다. 소학교 때 책상을 같이 했던 아이들의 이름과, 패, 경, 옥, 이런 이국 소녀들의 이름과, 벌써 아기 어머니 된 계집애들의 이름과, 가난한 이웃 사람들의 이름과, 비둘기, 강아지, 토끼, 노새, 노루, '프랑시스 잠[1]', '라이너 마리아 릴케[2]' 이런 시인의 이름을 불러 봅니다.
-
-이네들은 너무나 멀리 있습니다.
-별이 아스라이 멀듯이.
-
-어머님,
-그리고 당신은 멀리 북간도에 계십니다.
-
-나는 무엇인지 그리워
-이 많은 별빛이 내린 언덕 위에
-내 이름자를 써 보고
-흙으로 덮어 버리었습니다.
-
-따는 밤을 새워 우는 벌레는
-부끄러운 이름을 슬퍼하는 까닭입니다.
-
-그러나 겨울이 지나고 나의 별에도 봄이 오면
-무덤 위에 파란 잔디가 피어나듯이
-내 이름자 묻힌 언덕 위에도
-자랑처럼 풀이 무성할 거외다.
-(1941. 11. 5.)
-                </div>
-                <div class="section__article__body__footer">
-                </div>
+            <div class="section__article__body__footer">
             </div>
+        </div>
 
-            <div class="section__footer">
-                <!-- 댓글 부분 -->
-                <form action="" class="section__footer__form">
-                    <div class="section__footer__form__inp">
-                        <textarea class="footer__form__inp__detail" rows="3" placeholder="댓글을 작성하려면 로그인 해주세요."></textarea>
-                    </div>
-                    <div class="section__footer__form__butn">
-                        <button class="footer__form__butn__detail">댓글 쓰기</button>
-                    </div>
-                </form>
-            </div>
-            <div class="section__footer__comment">
-                <div class="section__footer__comment__count">
-                    <i class="fa-solid fa-comment"></i> 
-                    <div class="comment__count__detail">댓글 4</div>
+        <div class="section__footer">
+            <!-- 댓글 부분 -->
+            <form th:object="${commentRequestDto}"
+                  th:action="'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments/save'" th:method="post"
+                  class="section__footer__form">
+                <div class="section__footer__form__inp">
+                    <textarea th:field="*{content}" class="footer__form__inp__detail" rows="3"
+                              placeholder="댓글을 작성하려면 로그인 해주세요."></textarea>
                 </div>
-                <ul class="section__footer__comment__wrapper">
-                    <li class="comment__wrapper__detail">
-                        <div class="content__header">
-                            <div class="bulletin__mbti">
-                                ISTP
-                            </div>
-                            <div class="bulletin__time">
-                                <i class="fa-solid fa-clock"></i>
-                                <div class="bulletin__time__detail">10분전</div>
-                            </div>
+                <div class="section__footer__form__butn">
+                    <button class="footer__form__butn__detail">댓글 쓰기</button>
+                </div>
+            </form>
+        </div>
+        <div class="section__footer__comment">
+            <div class="section__footer__comment__count">
+                <i class="fa-solid fa-comment"></i>
+                <div th:text="${commentPage.getPageInfo().getTotal()}" class="comment__count__detail">댓글 4</div>
+            </div>
+            <ul class="section__footer__comment__wrapper">
+                <li th:each="comment: ${commentPage.getCommentResponseDtoList()}" class="comment__wrapper__detail">
+                    <div class="content__header">
+                        <div th:text="${comment.mbtiType}" class="bulletin__mbti">
+                            ISTP
                         </div>
-                        <div class="comment__wrapper__detail__body">季節계절이 지나가는 하늘에는
-                            가을로 가득 차있습니다。</div>
+                        <div class="bulletin__time">
+                            <i class="fa-solid fa-clock"></i>
+                            <div class="bulletin__time__detail">10분전</div>
+                        </div>
+                    </div>
+                    <div th:text="${comment.content}" class="comment__wrapper__detail__body">季節계절이 지나가는 하늘에는
+                        가을로 가득 차있습니다。
+                    </div>
+                </li>
+            </ul>
+            <nav th:if="${commentPage.pageInfo.total} > 0" class="nav__pagination">
+                <ul class="pagination"
+                    th:with="start=${commentPage.pageInfo.startNumber}, end=${commentPage.pageInfo.endNumber}">
+                    <li class="pagination__wrapper" th:if="${start > 1}">
+                        <a class="pagination__btn" th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${start} - 10, size=10)}"
+                           th:text="'<<'"></a>
                     </li>
-                    <li class="comment__wrapper__detail">
-                        <div class="content__header">
-                            <div class="bulletin__mbti">ENFP</div>
-                            <div class="bulletin__time">
-                                <i class="fa-solid fa-clock"></i>
-                                <div class="bulletin__time__detail">10분전</div>
-                            </div>
-                        </div>
-                        <div class="comment__wrapper__detail__body">매너를 지킨 댓글이에요^^</div>
+                    <li class="pagination__wrapper" th:if="${commentPage.pageInfo.hasPreviousPage}">
+                        <a class="pagination__btn"
+                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${commentPage.pageInfo.currentPage} - 1, size=10)}"
+                           th:text="'<'"></a>
+                    </li>
+
+                    <li class="pagination__wrapper" th:each="page: ${#numbers.sequence(start, end)}">
+                        <a th:if="${page} == ${commentPage.pageInfo.currentPage}" id="pagination_button_current" class="pagination__btn" th:text="${page}"
+                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${page}, size=10)}"></a>
+                        <a th:unless="${page} == ${commentPage.pageInfo.currentPage}" class="pagination__btn" th:text="${page}"
+                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${page}, size=10)}"></a>
+                    </li>
+
+                    <li class="pagination__wrapper" th:if="${commentPage.pageInfo.hasNextPage}">
+                        <a class="pagination__btn"
+                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${commentPage.pageInfo.currentPage} + 1, size=10)}"
+                           th:text="'>'"></a>
+                    </li>
+                    <li class="pagination__wrapper" th:if="${end < commentPage.pageInfo.totalPage}">
+                        <a class="pagination__btn" th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${end} + 10, size=10)}"
+                           th:text="'>>'"></a>
                     </li>
                 </ul>
-            </div>
+            </nav>
+        </div>
 
-        </article>
-        <footer class="section__footer"></footer>
-    </section>
+    </article>
+    <footer class="section__footer"></footer>
+</section>
 
 </body>
 
