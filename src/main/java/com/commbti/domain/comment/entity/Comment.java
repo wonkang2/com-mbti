@@ -15,7 +15,8 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends DateTime {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private Long id;
     private String content;
 
@@ -24,7 +25,7 @@ public class Comment extends DateTime {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "bulletin_id")
     private Bulletin bulletin;
 
     private Comment(Member member, Bulletin bulletin, String content) {
@@ -42,7 +43,7 @@ public class Comment extends DateTime {
     }
 
     public CommentResponseDto toResponseDto() {
-        return new CommentResponseDto(member.getNickname(), member.getMbtiType(), content, getCreatedAt());
+        return new CommentResponseDto(this.member.getMbtiType(), this.content, this.getCreatedAt());
     }
 
 }

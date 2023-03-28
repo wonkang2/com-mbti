@@ -4,11 +4,11 @@ import com.commbti.domain.comment.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+@Setter
 public class CommentRequestDto {
-
     private String content;
 }
