@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BulletinBoardRepository extends JpaRepository<Bulletin, Long> {
 
-    @Query(value = "SELECT b FROM Bulletin b JOIN FETCH b.member",
+    @Query(value = "SELECT b FROM Bulletin b JOIN FETCH b.member ORDER BY b.createdAt DESC",
             countQuery = "SELECT count(b) FROM Bulletin b")
     Page<Bulletin> findPageWithMemberMbti(Pageable pageable);
 }
