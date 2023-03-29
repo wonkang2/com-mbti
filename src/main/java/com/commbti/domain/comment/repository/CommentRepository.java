@@ -12,4 +12,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(value = "SELECT c FROM Comment c JOIN FETCH c.member WHERE c.bulletin.id = :bulletinId ORDER BY c.createdAt DESC",
             countQuery = "SELECT count(c) FROM Comment c WHERE c.bulletin.id = :bulletinId")
     Page<Comment> findPageWithMemberMbtiByBulletinId(@Param("bulletinId") Long bulletinId, Pageable pageable);
+
+    void deleteAllByBulletin_Id(Long bulletinId);
 }

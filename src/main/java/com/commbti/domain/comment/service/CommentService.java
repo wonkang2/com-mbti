@@ -79,4 +79,9 @@ public class CommentService {
 
         commentRepository.delete(findComment);
     }
+
+    public void deleteAllByBulletinId(Long bulletinId) {
+        commentRepository.deleteAllByBulletin_Id(bulletinId);
+
+    }
 }
