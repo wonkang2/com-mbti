@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/common/layout.css">
     <title>ComMBTI</title>
 
+    <script src="/js/common/popup.js"></script>
     <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
 </head>
 
@@ -24,21 +25,27 @@
     </header>
     <article class="section__article">
         <div class="content__header">
-            <div class="content__header__left"></div>
+            <div class="content__header__left">
+                <div th:text="${bulletin.mbtiType}" class="bulletin__mbti">
+                    INTJ
+                </div>
+                <div class="bulletin__time">
+                    <i class="fa-solid fa-clock"></i>
+                    <div class="bulletin__time__detail">10분전</div>
+                </div>
+                <div class="bulletin__view">
+                    <i class="fa-solid fa-eye"></i>
+                    <div th:text="${bulletin.viewCount}" class="bulletin__view__detail">5</div>
+                </div>
+            </div>
             <div class="content__header__right">
-                해당 게시글을 작성한 유저: 수정하기 삭제하기
-                해당 게시글을 작성하지 않은 유저: 신고하기
-            </div>
-            <div th:text="${bulletin.mbtiType}" class="bulletin__mbti">
-                INTJ
-            </div>
-            <div class="bulletin__time">
-                <i class="fa-solid fa-clock"></i>
-                <div class="bulletin__time__detail">10분전</div>
-            </div>
-            <div class="bulletin__view">
-                <i class="fa-solid fa-eye"></i>
-                <div th:text="${bulletin.viewCount}" class="bulletin__view__detail">5</div>
+                <!--해당 게시글을 작성한 유저: 수정하기 삭제하기-->
+                <!--TODO:해당 게시글을 작성하지 않은 유저: 신고하기-->
+                <!--                <button onclick=report()>신고하기</button>-->
+                <button th:onclick="location.href='/bulletin-board/bulletins/[[${bulletin.bulletinId}]]/edit';" class="content__header__right__detail">수정하기</button>
+                <button th:onclick="deleteBulletin([[${bulletin.bulletinId}]])" class="content__header__right__detail">
+                    삭제하기
+                </button>
             </div>
         </div>
 
@@ -97,7 +104,8 @@
                 <ul class="pagination"
                     th:with="start=${commentPage.pageInfo.startNumber}, end=${commentPage.pageInfo.endNumber}">
                     <li class="pagination__wrapper" th:if="${start > 1}">
-                        <a class="pagination__btn" th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${start} - 10, size=10)}"
+                        <a class="pagination__btn"
+                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${start} - 10, size=10)}"
                            th:text="'<<'"></a>
                     </li>
                     <li class="pagination__wrapper" th:if="${commentPage.pageInfo.hasPreviousPage}">
@@ -107,9 +115,11 @@
                     </li>
 
                     <li class="pagination__wrapper" th:each="page: ${#numbers.sequence(start, end)}">
-                        <a th:if="${page} == ${commentPage.pageInfo.currentPage}" id="pagination_button_current" class="pagination__btn" th:text="${page}"
+                        <a th:if="${page} == ${commentPage.pageInfo.currentPage}" id="pagination_button_current"
+                           class="pagination__btn" th:text="${page}"
                            th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${page}, size=10)}"></a>
-                        <a th:unless="${page} == ${commentPage.pageInfo.currentPage}" class="pagination__btn" th:text="${page}"
+                        <a th:unless="${page} == ${commentPage.pageInfo.currentPage}" class="pagination__btn"
+                           th:text="${page}"
                            th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${page}, size=10)}"></a>
                     </li>
 
@@ -119,7 +129,8 @@
                            th:text="'>'"></a>
                     </li>
                     <li class="pagination__wrapper" th:if="${end < commentPage.pageInfo.totalPage}">
-                        <a class="pagination__btn" th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${end} + 10, size=10)}"
+                        <a class="pagination__btn"
+                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${end} + 10, size=10)}"
                            th:text="'>>'"></a>
                     </li>
                 </ul>
@@ -129,7 +140,25 @@
     </article>
     <footer class="section__footer"></footer>
 </section>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function deleteBulletin() {
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            const id = [[ ${bulletin.bulletinId}]];
 
+            const formHtml = `
+          <form id="deleteForm" action="/bulletin-board/bulletins/${id}/delete" method="post">
+              <input type="hidden" id="id" name="id" value="${id}" />
+          </form>`;
+            const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+            const form = doc.body.firstChild;
+            document.body.append(form);
+            document.getElementById('deleteForm').submit();
+        }
+    }
+
+    /*]]>*/
+</script>
 </body>
 
 </html>
