@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>ComMBTI</title>
+    <link rel="stylesheet" href="/css/common/layout.css">
+    <link rel="stylesheet" href="/css/bulletin-board/post.css">
+    <link rel="stylesheet" href="/css/common/header.css">
+    <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header th:replace="/common/header::header">
+        게시판의 헤더 부분
+    </header>
+    <section class="section">
+        <article class="section__article">
+            <form th:object="${newBulletin}" action="/bulletin-board/bulletins/[[$bulletinResponseDto.bulletinId]]/save" method="post" enctype="multipart/form-data" class="section__article__form">
+                <div class="article__form">
+                    <div class="article__form__detail">제목</div>
+                    <input name="title" th:value="${oldBulletin.title}" type="text" class="article__form__input">
+                </div>
+                <div class="article__form">
+                    <div class="article__form__detail">본문</div>
+                    <textarea name="content" th:value="${oldBulletin.content}" th:text="${oldBulletin.content}" cols="30" rows="10" placeholder="내용을 입력해주세요." class="article__form__input"></textarea>
+                </div>
+                <div class="article__form">
+                    <div class="article__form__detail">파일첨부</div>
+                    <input name="files" th:value="${oldBulletin.filePathList}" type="file" multiple="multiple" class="article__form__file__input">
+<!--                    <ul>-->
+<!--                        <li th:each="file: ${oldBulletin.getFilePathList()}">-->
+<!--                            <img th:src="${file}" alt="">-->
+<!--                        </li>-->
+<!--                    </ul>-->
+                </div>
+                <div class="article__form">
+                    <button class="article__form__submit__button" type="submit">등록하기</button>
+                </div>
+                
+            </form>
+        </article>
+    </section>
+
+</body>
+
+</html>
