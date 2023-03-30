@@ -1,4 +1,4 @@
-package com.commbti.domain.page.dto;
+package com.commbti.global.page;
 
 import lombok.Builder;
 import lombok.Getter;

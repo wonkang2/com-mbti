@@ -1,9 +1,7 @@
 package com.commbti.domain.comment.dto;
 
-import com.commbti.domain.bulletinboard.dto.BoardResponseDto;
-import com.commbti.domain.bulletinboard.entity.Bulletin;
 import com.commbti.domain.comment.entity.Comment;
-import com.commbti.domain.page.dto.PageInfo;
+import com.commbti.global.page.PageInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
