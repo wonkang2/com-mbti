@@ -2,6 +2,7 @@ package com.commbti.domain.bulletinboard.dto;
 
 import com.commbti.domain.file.entity.ImageFile;
 import com.commbti.domain.member.entity.MbtiType;
+import com.commbti.global.date.DateUtils;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,7 +18,7 @@ public class BulletinResponseDto {
     private String content;
     private List<String> filePathList;
     private Long viewCount;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     private BulletinResponseDto() {
     }
@@ -30,7 +31,7 @@ public class BulletinResponseDto {
         imageFileListToFilePathList(imageFileList);
         this.viewCount = viewCount;
         this.mbtiType = mbtiType;
-        this.createdAt = createdAt;
+        this.createdAt = DateUtils.convertToTimesAgo(createdAt);
     }
 
     private void imageFileListToFilePathList(List<ImageFile> imageFileList) {

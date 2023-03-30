@@ -31,11 +31,11 @@
                 </div>
                 <div class="bulletin__time">
                     <i class="fa-solid fa-clock"></i>
-                    <div class="bulletin__time__detail">10분전</div>
+                    <div th:text="${bulletin.createdAt}" class="content__side__info__detail">10분전</div>
                 </div>
                 <div class="bulletin__view">
                     <i class="fa-solid fa-eye"></i>
-                    <div th:text="${bulletin.viewCount}" class="bulletin__view__detail">5</div>
+                    <div th:text="${bulletin.viewCount}" class="content__side__info__detail">5</div>
                 </div>
             </div>
             <div class="content__header__right">
@@ -92,7 +92,7 @@
                         </div>
                         <div class="bulletin__time">
                             <i class="fa-solid fa-clock"></i>
-                            <div class="bulletin__time__detail">10분전</div>
+                            <div th:text="${comment.createdAt}" class="content__side__info__detail">10분전</div>
                         </div>
                     </div>
                     <div th:text="${comment.content}" class="comment__wrapper__detail__body">季節계절이 지나가는 하늘에는

@@ -12,7 +12,6 @@
   padding: 0px 10px;
   border-radius: 5px;
   margin-right: 15px;
-
   font-size: 15px;
   font-weight: 500;
   color: white;
@@ -22,22 +21,18 @@
 .bulletin__time {
   display: flex;
   flex-direction: row;
-  align-content: center;
+  align-items: center;
   font-size: 15px;
   margin: 0px 5px;
+  text-align: center;
   height: 100%;
 }
 
 .fa-solid {
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  text-align: center;
   color: #696969;
 }
 
-.bulletin__time__detail {
+.content__side__info__detail {
   display: flex;
   flex-direction: row;
   height: 100%;
@@ -57,14 +52,6 @@
   font-size: 15px;
 }
 
-.bulletin__view__detail {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  align-items: end;
-  font-size: 15px;
-  margin-left: 5px;
-}
 
 /** 개별 요소 **/
 .section {
