@@ -1,6 +1,7 @@
 package com.commbti.domain.file.entity;
 
 import com.commbti.domain.bulletinboard.entity.Bulletin;
+import com.commbti.domain.file.dto.ImageFileResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -38,5 +39,9 @@ public class ImageFile {
     }
     public static ImageFile createImageFile(String fileName, String filePath, Bulletin bulletin) {
         return new ImageFile(fileName, filePath, bulletin);
+    }
+
+    public ImageFileResponseDto toResponseDto() {
+        return new ImageFileResponseDto(this.id, this.filepath);
     }
 }

@@ -1,20 +1,17 @@
 package com.commbti.domain.bulletinboard.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-@Getter
+import java.util.List;
+
+@Setter @Getter
+@NoArgsConstructor
 public class BulletinPatchDto {
     private String title;
     private String content;
-    private MultipartFile file;
-
-    private BulletinPatchDto() {
-    }
-
-    public BulletinPatchDto(String title, String content, MultipartFile file) {
-        this.title = title;
-        this.content = content;
-        this.file = file;
-    }
+    private List<MultipartFile> files;
+    private List<Long> deleteFiles;
 }
