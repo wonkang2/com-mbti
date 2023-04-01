@@ -1,0 +1,28 @@
+.article__form__files {
+    list-style: none;
+    padding-left: 0;
+}
+.article__form__files__wrapper {
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-top: 5px;
+}
+
+
+.article__form__files__file {
+    height: 100%;
+    width: 80px;
+    margin-right: 5px;
+}
+
+.article__form__files__button {
+    border: none;
+    background-color: white;
+
+}
+
+.article__form__files__button:hover {
+    cursor: pointer;
+}

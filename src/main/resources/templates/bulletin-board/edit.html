@@ -1,48 +1,99 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
-
+<!--th:action="'/bulletin-board/bulletins/' + ${oldBulletin.bulletinId} + '/save'"-->
 <head>
     <meta charset="UTF-8">
     <title>ComMBTI</title>
     <link rel="stylesheet" href="/css/common/layout.css">
     <link rel="stylesheet" href="/css/bulletin-board/post.css">
+    <link rel="stylesheet" href="/css/bulletin-board/edit.css">
     <link rel="stylesheet" href="/css/common/header.css">
     <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <header th:replace="/common/header::header">
-        게시판의 헤더 부분
-    </header>
-    <section class="section">
-        <article class="section__article">
-            <form th:object="${newBulletin}" action="/bulletin-board/bulletins/[[$bulletinResponseDto.bulletinId]]/save" method="post" enctype="multipart/form-data" class="section__article__form">
-                <div class="article__form">
-                    <div class="article__form__detail">제목</div>
-                    <input name="title" th:value="${oldBulletin.title}" type="text" class="article__form__input">
-                </div>
-                <div class="article__form">
-                    <div class="article__form__detail">본문</div>
-                    <textarea name="content" th:value="${oldBulletin.content}" th:text="${oldBulletin.content}" cols="30" rows="10" placeholder="내용을 입력해주세요." class="article__form__input"></textarea>
-                </div>
-                <div class="article__form">
-                    <div class="article__form__detail">파일첨부</div>
-                    <input name="files" th:value="${oldBulletin.filePathList}" type="file" multiple="multiple" class="article__form__file__input">
-<!--                    <ul>-->
-<!--                        <li th:each="file: ${oldBulletin.getFilePathList()}">-->
-<!--                            <img th:src="${file}" alt="">-->
-<!--                        </li>-->
-<!--                    </ul>-->
-                </div>
-                <div class="article__form">
-                    <button class="article__form__submit__button" type="submit">등록하기</button>
-                </div>
-                
-            </form>
-        </article>
-    </section>
+<header th:replace="/common/header::header">
+    게시판의 헤더 부분
+</header>
+<section class="section">
+    <article class="section__article">
+        <form th:object="${newBulletin}" class="section__article__form" id="form">
+            <div class="article__form">
+                <div class="article__form__detail">제목</div>
+                <input name="title" th:value="${oldBulletin.title}" type="text" class="article__form__input">
+            </div>
+            <div class="article__form">
+                <div class="article__form__detail">본문</div>
+                <textarea name="content" th:value="${oldBulletin.content}" th:text="${oldBulletin.content}" cols="30"
+                          rows="10" placeholder="내용을 입력해주세요." class="article__form__input"></textarea>
+            </div>
+            <div class="article__form">
+                <div class="article__form__detail">파일첨부</div>
+                <input name="files" th:value="${oldBulletin.imageFileResponseDtoList}" type="file" multiple="multiple"
+                       class="article__form__file__input" , id="imageInput">
 
+                <ul th:unless="${oldBulletin.imageFileResponseDtoList} == null" class="article__form__files">
+                    <li th:each="image: ${oldBulletin.imageFileResponseDtoList}" class="article__form__files__wrapper"
+                        th:id="${image.imageId}">
+                        <img th:src="${image.imagePath}" alt="" class="article__form__files__file">
+                        <button th:onclick="deleteImage([[${image.imageId}]])" class="article__form__files__button"
+                                type="button">❌삭제하기
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="article__form">
+                <button class="article__form__submit__button" type="button" onclick="formSubmit()">저장하기</button>
+            </div>
+
+        </form>
+    </article>
+</section>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const requestURL = "http://localhost:8080";
+    const bulletinId = [[${oldBulletin.bulletinId}]];
+    let deleteFileList = [];
+    function deleteImage(imageId) {
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            console.log("imageId: {}", imageId);
+            let wrapper = document.getElementById(imageId);
+            deleteFileList.push(imageId);
+            wrapper.remove();
+            console.log(deleteFileList);
+            alert("삭제되었습니다.");
+        }
+    }
+
+    function formSubmit() {
+        console.log("bulletinId: {}", bulletinId);
+        let form = document.getElementById('form');
+        const formData = new FormData(form);
+
+        for (let i = 0; i < deleteFileList.length; i++) {
+            formData.append("deleteFiles[" + i + "]", deleteFileList[i]);
+        }
+
+        for (let key of formData.keys()) {
+            console.debug(key, ":", formData.get(key));
+        }
+
+        fetch(requestURL + '/bulletin-board/bulletins/' + bulletinId + '/save', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.ok === true) {
+                alert("수정되었습니다.");
+                window.location.replace(requestURL + "/bulletin-board/bulletins/" + bulletinId);
+            } else {
+                console.log("HTTP Error!!!");
+                throw new Error('다시 요청해주세요.');
+            }
+        }).catch(error => alert(error));
+    };
+    /*]]>*/
+</script>
 </body>
 
 </html>
