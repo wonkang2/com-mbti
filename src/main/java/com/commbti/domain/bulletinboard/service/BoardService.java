@@ -20,17 +20,12 @@ public class BoardService {
 
     // 게시글 조회(전체)
     public BoardPageDto findBoardPage(int page, int size) {
-        log.trace("findBoardListPage 호출: page={}, size={}", page, size);
         // 기본값: page=0; size= 10;
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         Page<Bulletin> boardPage = bulletinBoardRepository.findPageWithMemberMbti(pageRequest);
 
-        log.debug("Page<Bulletin>: totalPages={}, getTotalElements={}, hasNext={}, hasPrev={}", boardPage.getTotalPages(), boardPage.getTotalElements(), boardPage.hasNext(), boardPage.hasPrevious());
-
         BoardPageDto response = BoardPageDto.toPageDto(boardPage);
-        log.debug("BoardPageDto.PageInfo: startNumber={}, endNumber={}", response.getPageInfo().getStartNumber(), response.getPageInfo().getEndNumber());
 
-        log.trace("findBoardListPage 정상");
         return response;
     }
 }

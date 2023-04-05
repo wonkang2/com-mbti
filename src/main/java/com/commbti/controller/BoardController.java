@@ -22,10 +22,8 @@ public class BoardController {
     public String getBoardPage(@RequestParam("page") int page,
                                @RequestParam("size") int size,
                                Model model) {
-        log.trace("getBoardPage() 호출");
         BoardPageDto response = boardService.findBoardPage(page, BOARD_SIZE);
         model.addAttribute("boardPage", response);
-        log.trace("getBoardPage() 정상");
         return "/bulletin-board/board";
     }
 

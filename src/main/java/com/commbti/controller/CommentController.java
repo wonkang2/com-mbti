@@ -34,7 +34,6 @@ public class CommentController {
                               @RequestParam int page,
                               @RequestParam int size,
                               Model model) {
-        log.trace("getBulletin() 메서드 호출");
         BulletinResponseDto bulletinResponse = bulletinService.findOne(bulletinId);
         CommentPageDto commentResponse = commentService.findCommentPageByBulletinId(bulletinId, page, size);
         CommentRequestDto commentRequestDto = new CommentRequestDto();
@@ -42,7 +41,6 @@ public class CommentController {
         model.addAttribute("bulletin", bulletinResponse);
         model.addAttribute("commentPage", commentResponse);
         model.addAttribute(commentRequestDto);
-        log.trace("getBulletin() 메서드 종료");
         return "/bulletin-board/bulletin";
     }
 }
