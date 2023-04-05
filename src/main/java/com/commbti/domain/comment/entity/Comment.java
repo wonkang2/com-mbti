@@ -43,7 +43,7 @@ public class Comment extends DateTime {
     }
 
     public CommentResponseDto toResponseDto() {
-        return new CommentResponseDto(this.member.getMbtiType(), this.content, this.getCreatedAt());
+        return new CommentResponseDto(this.id, this.member.getMbtiType(), this.content, this.getCreatedAt());
     }
 
 }

@@ -44,29 +44,23 @@ public class CommentService {
     // 게시글에 해당하는 댓글 조회
     @Transactional(readOnly = true)
     public CommentPageDto findCommentPageByBulletinId(Long bulletinId, int page, int size) {
-        log.trace("findCommentPageByBulletinId() 메서드 호출");
-        log.debug("bulletinId: {}, page: {}, size: {}", bulletinId, page, size);
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         Page<Comment> commentPage = commentRepository.findPageWithMemberMbtiByBulletinId(bulletinId, pageRequest);
 
         CommentPageDto response = CommentPageDto.toPageDto(commentPage);
-        log.trace("findCommentPageByBulletinId() 메서드 종료");
         return response;
     }
 
     // 댓글 수정 TODO
-    public Long updateComment(Long memberId, Long commentId, CommentRequestDto commentRequestDto) {
+    public CommentResponseDto updateComment(Long memberId, Long commentId, CommentRequestDto commentRequestDto) {
         Member findMember = memberService.findMember(memberId);
-        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+        Comment foundComment = commentRepository.findById(commentId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")
+        );
 
-        Comment findComment = optionalComment.orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
+        foundComment.update(commentRequestDto.getContent());
 
-        String updateContent = commentRequestDto.getContent();
-
-        findComment.update(updateContent);
-
-        return findComment.getId();
+        return foundComment.toResponseDto();
     }
 
     // 댓글 삭제 TODO

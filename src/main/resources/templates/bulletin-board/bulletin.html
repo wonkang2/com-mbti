@@ -42,7 +42,9 @@
                 <!--해당 게시글을 작성한 유저: 수정하기 삭제하기-->
                 <!--TODO:해당 게시글을 작성하지 않은 유저: 신고하기-->
                 <!--                <button onclick=report()>신고하기</button>-->
-                <button th:onclick="location.href='/bulletin-board/bulletins/[[${bulletin.bulletinId}]]/edit';" class="content__header__right__detail">수정하기</button>
+                <button th:onclick="location.href='/bulletin-board/bulletins/[[${bulletin.bulletinId}]]/edit';"
+                        class="content__header__right__detail">수정하기
+                </button>
                 <button th:onclick="deleteBulletin([[${bulletin.bulletinId}]])" class="content__header__right__detail">
                     삭제하기
                 </button>
@@ -54,9 +56,9 @@
                 게시글 제목
             </div>
             <div class="article__body__content">
-                <div th:if="${not #lists.isEmpty(bulletin.getFilePathList())}"
-                     th:each="filePath: ${bulletin.getFilePathList()}" class="article__body__content__image">
-                    <img class="body__content__image__detail" th:src="@{''} + ${filePath}"/>
+                <div th:if="${not #lists.isEmpty(bulletin.imageFileResponseDtoList)}"
+                     th:each="image: ${bulletin.imageFileResponseDtoList}" class="article__body__content__image">
+                    <img class="body__content__image__detail" th:src="@{${image.imagePath}}"/>
                 </div>
                 <div th:text="${bulletin.content}" class="article__body__content__text">게시글 본문</div>
             </div>
@@ -71,7 +73,7 @@
                   th:action="'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments/save'" th:method="post"
                   class="section__footer__form">
                 <div class="section__footer__form__inp">
-                    <textarea th:field="*{content}" class="footer__form__inp__detail" rows="3"
+                    <textarea th:field="*{content}" class="input__detail" rows="3"
                               placeholder="댓글을 작성하려면 로그인 해주세요."></textarea>
                 </div>
                 <div class="section__footer__form__butn">
@@ -79,25 +81,51 @@
                 </div>
             </form>
         </div>
-        <div class="section__footer__comment">
+        <div class="section__footer__wrapper">
             <div class="section__footer__comment__count">
                 <i class="fa-solid fa-comment"></i>
                 <div th:text="${commentPage.getPageInfo().getTotal()}" class="comment__count__detail">댓글 4</div>
             </div>
             <ul class="section__footer__comment__wrapper">
-                <li th:each="comment: ${commentPage.getCommentResponseDtoList()}" class="comment__wrapper__detail">
-                    <div class="content__header">
-                        <div th:text="${comment.mbtiType}" class="bulletin__mbti">
-                            ISTP
+                <li th:each="comment: ${commentPage.commentResponseDtoList}" class="comment__wrapper"
+                    th:id="${comment.commentId}">
+                    <div class="comment__header">
+                        <div class="comment__header__left">
+                            <div th:text="${comment.mbtiType}" class="bulletin__mbti">
+                                ISTP
+                            </div>
+                            <div class="bulletin__time">
+                                <i class="fa-solid fa-clock"></i>
+                                <div th:text="${comment.createdAt}" class="content__side__info__detail">10분전</div>
+                            </div>
                         </div>
-                        <div class="bulletin__time">
-                            <i class="fa-solid fa-clock"></i>
-                            <div th:text="${comment.createdAt}" class="content__side__info__detail">10분전</div>
+                        <div class="comment__header__right">
+                            <!--해당 게시글을 작성한 유저: 수정하기 삭제하기-->
+                            <!--TODO:해당 게시글을 작성하지 않은 유저: 신고하기-->
+                            <!--                <button onclick=report()>신고하기</button>-->
+                            <button th:id="'editButton-' + ${comment.commentId}"
+                                    th:data-comment-id="${comment.commentId}"
+                                    class="comment__edit__button">수정하기
+                            </button>
+                            <button th:id="'deleteButton-' + ${comment.commentId}"
+                                    th:data-comment-id="${comment.commentId}"
+                                    class="comment__delete__button">
+                                삭제하기
+                            </button>
+                            <button th:id="'saveButton-' + ${comment.commentId}"
+                                    th:data-comment-id="${comment.commentId}"
+                                    class="comment__save__button">
+                                저장하기
+                            </button>
                         </div>
                     </div>
-                    <div th:text="${comment.content}" class="comment__wrapper__detail__body">季節계절이 지나가는 하늘에는
-                        가을로 가득 차있습니다。
+                    <div class="comment__body__wrapper">
+                        <div th:id="'content-' + ${comment.commentId}" th:text="${comment.content}"
+                             class="comment__body__content">
+                            季節계절이 지나가는 하늘에는 가을로 가득 차있습니다。
+                        </div>
                     </div>
+
                 </li>
             </ul>
             <nav th:if="${commentPage.pageInfo.total} > 0" class="nav__pagination">
@@ -142,8 +170,12 @@
 </section>
 <script th:inline="javascript">
     /*<![CDATA[*/
+    let commentId;
+    let content;
+
     function deleteBulletin() {
         if (confirm("정말로 삭제하시겠습니까?")) {
+            console.log("deleteBulletin")
             const id = [[ ${bulletin.bulletinId}]];
 
             const formHtml = `
@@ -157,6 +189,106 @@
         }
     }
 
+    // *************** 댓글 부분 ********************
+    let editButton = document.querySelectorAll('.comment__edit__button');
+    let commentDeleteButton = document.querySelectorAll('.comment__delete__button');
+    let saveButton = document.querySelectorAll('.comment__save__button');
+
+    // 댓글 수정 이벤트
+    editButton.forEach(function (item) {
+        item.addEventListener('click', function (event) {
+            console.log("댓글 수정 이벤트 호출")
+
+            let target = event.target;
+            console.log("deleteBtn: ", target)
+            const commentId = target.getAttribute("data-comment-id");
+            console.log("commentId: ", commentId);
+
+            let oldContent = document.getElementById('content-' + commentId);
+            console.log("oldContent: ", oldContent);
+            let newContent = document.createElement('input');
+            newContent.className = 'input__detail';
+            newContent.value = oldContent.innerHTML;
+            newContent.id = oldContent.id;
+            console.log("oldContent: ", oldContent);
+            console.log("newContent: ", newContent);
+
+            document.getElementById('editButton-'+commentId).style.display = 'none';
+            document.getElementById('deleteButton-' + commentId).style.display = 'none';
+            let saveButton = document.getElementById('saveButton-' + commentId);
+            saveButton.style.display = 'block'
+
+            // deleteButton.replaceWith(saveButton);
+            oldContent.replaceWith(newContent);
+        })
+    })
+
+    let commentSaveButton = document.querySelectorAll('.comment__save__button');
+    commentSaveButton.forEach(function (item) {
+        item.addEventListener('click', function (event) {
+            console.log("댓글 저장 이벤트 호출");
+            let target = event.target;
+            console.log("deleteBtn: ", target)
+            const commentId = target.getAttribute("data-comment-id");
+            console.log("commentId: ", commentId);
+            let content = document.getElementById('content-' + commentId);
+            console.log("content: ", content);
+            const comment = {
+                content: content.value
+            }
+            console.log("comment: ",comment)
+
+            const url = "/api/comments/" + commentId;
+            fetch(url, {
+                method: "PATCH",
+                body: JSON.stringify(comment),
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }).then(res => {
+                let result;
+                if(res.ok) {
+                    result = "댓글이 수정되었습니다.";
+                } else {
+                    result = "댓글 수정을 실패하였습니다.";
+                }
+                alert(result);
+                window.location.reload();
+            })
+
+        });
+    })
+
+    // 댓글 삭제
+    commentDeleteButton.forEach(function (item) {
+        item.addEventListener('click', function (event) {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                console.log("댓글 삭제 이벤트 호출")
+                let target = event.target;
+                console.log("deleteBtn: ", target)
+                const commentId = target.getAttribute("data-comment-id");
+                console.log("commentId: ", commentId);
+
+                const url = "/api/comments/" + commentId;
+                fetch(url, {
+                    method: "DELETE",
+                }).then(res => {
+                    console.log(res);
+                    let result;
+                    if (res.ok) {
+                        result = "삭제되었습니다.";
+                        alert(result);
+                        let deleteComment = document.getElementById(commentId);
+                        console.log(deleteComment);
+                        window.location.reload();
+                    } else {
+                        result = "다시 요청해주세요.";
+                        alert(result);
+                    }
+                });
+            }
+        })
+    });
     /*]]>*/
 </script>
 </body>
