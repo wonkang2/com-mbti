@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/auth/signup.css">
+  <title>로그인</title>
+</head>
+
+<body>
+<div class="background">
+  <div class="wrapper">
+    <div class="header">
+      로그인
+    </div>
+    <div class="body">
+      <form class="body__wrapper" action="/login-process" method="post">
+        <div class="input__wrapper">
+          <div class="form__typing__text">* 아이디</div>
+          <input name="username" class="form__typing__input" type="text"
+                 id="username">
+        </div>
+        <div class="input__wrapper">
+          <div class="form__typing__text">* 비밀번호</div>
+          <input name="password" class="form__typing__input" type="password"
+                 id="password1">
+        </div>
+        <div class="body__form__submit">
+          <button id="signupButton" class="body__form__submit__button" type="submit">로그인</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>

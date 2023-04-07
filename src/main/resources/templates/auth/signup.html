@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/auth/signup.css">
+    <title>회원가입</title>
+</head>
+
+<body>
+<div class="background">
+    <div class="wrapper">
+        <div class="header">
+            회원 가입을 위해<br>정보를 입력해주세요
+        </div>
+        <div class="body">
+            <div class="body__wrapper">
+                <div class="input__wrapper">
+                    <div class="form__typing__text">* 이메일</div>
+                    <input th:value="${dto.email}" name="email" class="form__typing__input" type="email" id="email">
+                </div>
+                <div class="input__wrapper">
+                    <div class="form__typing__text">* 아이디</div>
+                    <input th:value="${dto.username}" name="username" class="form__typing__input" type="text"
+                           id="username">
+                </div>
+                <div class="input__wrapper">
+                    <div class="form__typing__text">* 비밀번호</div>
+                    <input th:value="${dto.password}" name="password" class="form__typing__input" type="password"
+                           id="password1">
+                </div>
+                <div class="input__wrapper">
+                    <div class="form__typing__text">* 비밀번호 확인</div>
+                    <input class="form__typing__input" type="password" id="password2">
+                </div>
+                <div class="select__wrapper">
+                    <div class="form__typing__text">* MBTI</div>
+                    <select th:value="${dto.mbti}" name="mbti" id="mbti" class="input__select">
+                        <option value="none">MBTI을 선택해주세요.</option>
+                        <option value="INTJ">INTJ</option>
+                        <option value="INTP">INTP</option>
+                        <option value="ENTJ">ENTJ</option>
+                        <option value="ENTP">ENTP</option>
+                        <option value="INFJ">INFJ</option>
+                        <option value="INFP">INFP</option>
+                        <option value="ENFJ">ENFJ</option>
+                        <option value="ENFP">ENFP</option>
+                        <option value="ISTJ">ISTJ</option>
+                        <option value="ISFJ">ISFJ</option>
+                        <option value="ESTJ">ESTJ</option>
+                        <option value="ESFJ">ESFJ</option>
+                        <option value="ISTP">ISTP</option>
+                        <option value="ISFP">ISFP</option>
+                        <option value="ESTP">ESTP</option>
+                        <option value="ESFP">ESFP</option>
+                    </select>
+                </div>
+                <div class="body__form__submit">
+                    <button id="signupButton" class="body__form__submit__button" type="button">가입하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="/js/auth/signup.js"></script>
+</html>
