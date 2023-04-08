@@ -51,11 +51,11 @@ public class SecurityConfig {
 
                 .authorizeRequests(request -> request
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .mvcMatchers("/css/**", "/js/**").permitAll()
+                        .antMatchers("/css/**", "/js/**", "/Users/**").permitAll()
                         .antMatchers("/admin/**").hasAnyRole("ADMIN")
                         .antMatchers("/bulletin-board/*/edit", "/bulletin-board/*/post").authenticated()
-                        .antMatchers(HttpMethod.GET, "/bulletin-board/**", "/comments/**", "/login/**", "/signup/**", "/").permitAll()
-                        .antMatchers(HttpMethod.POST, "/api/signup").permitAll()
+                        .antMatchers(HttpMethod.GET, "/bulletin-board/**", "/comments/**", "/login/**", "/").permitAll()
+                        .antMatchers("/api/signup", "/signup/**").permitAll()
                         .anyRequest().authenticated());
         http
                 .formLogin()
