@@ -17,7 +17,7 @@ signupButton.addEventListener('click', function () {
         email: email.value,
         mbti: mbti.value
     }
-    const url = "/signup";
+    const url = "/api/signup";
     fetch(url, {
         method: "POST",
         body: JSON.stringify(member),

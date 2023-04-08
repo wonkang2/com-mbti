@@ -1,42 +1,8 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-.body {
+.section__body {
   height: 100%;
-}
-
-.background {
-  background-color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding: 60px 0px 60px 0px;
-}
-
-.wrapper {
-  width: 570px;
-  height: 760px;
-  border: 1px solid #AACDFF;
-  box-shadow: 7px 7px 39px rgba(0, 104, 255, 0.25);
-  border-radius: 20px;
-  padding: 72px 104px 70px 100px;
   display: flex;
   flex-direction: column;
-}
-
-.header {
-  height: 94px;
-  width: 100%;
-  color: #0068FF;
-  font-style: normal;
-  font-family:'Noto Sans CJK KR';
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 47px;
-  margin: 0px 0px 20px 0px;
-  text-shadow: 1px 1px 20px rgba(0, 104, 255, 0.55);
+  padding-bottom: 30px;
 }
 
 .body__wrapper {
@@ -84,6 +50,10 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
+}
+
+.body__form__submit {
+  margin-top: 20px;
 }
 
 .body__form__submit__button {
