@@ -30,10 +30,10 @@ public class Bulletin extends DateTime {
     @Formula("(select count(1) from Comment c where c.bulletin_id = bulletin_id)")
     private Long commentCount;
 
-    @OneToMany(mappedBy = "bulletin")
+    @OneToMany(mappedBy = "bulletin", cascade = CascadeType.ALL)
     private List<ImageFile> imageFileList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -70,6 +70,7 @@ public class Bulletin extends DateTime {
     /* --------------------------- toDto --------------------------- */
     public BulletinResponseDto toBulletinResponseDto() {
         return BulletinResponseDto.builder()
+                .memberId(this.member.getId())
                 .bulletinId(this.id)
                 .mbtiType(member.getMbtiType())
                 .title(this.title)
