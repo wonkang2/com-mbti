@@ -27,16 +27,15 @@ import java.util.stream.Collectors;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final MemberService memberService;
     private final BulletinService bulletinService;
 
     // 댓글 생성 TODO
-    public void createComment(Long memberId, Long bulletinId, CommentRequestDto commentRequestDto) {
-        Member findMember = memberService.findMember(memberId);
+    public void createComment(Member member, Long bulletinId, CommentRequestDto commentRequestDto) {
+
         Bulletin findBulletin = bulletinService.getVerifiedBulletin(bulletinId);
         String content = commentRequestDto.getContent();
 
-        Comment comment = Comment.create(findMember, findBulletin, content);
+        Comment comment = Comment.create(member, findBulletin, content);
 
         commentRepository.save(comment);
     }
@@ -52,11 +51,14 @@ public class CommentService {
     }
 
     // 댓글 수정 TODO
-    public CommentResponseDto updateComment(Long memberId, Long commentId, CommentRequestDto commentRequestDto) {
-        Member findMember = memberService.findMember(memberId);
+    public CommentResponseDto updateComment(Member member, Long commentId, CommentRequestDto commentRequestDto) {
         Comment foundComment = commentRepository.findById(commentId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")
         );
+
+        if (foundComment.getMember().getId() != member.getId()) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
 
         foundComment.update(commentRequestDto.getContent());
 
@@ -64,8 +66,7 @@ public class CommentService {
     }
 
     // 댓글 삭제 TODO
-    public void deleteComment(Long memberId, Long commentId) {
-        Member findMember = memberService.findMember(memberId);
+    public void deleteComment(Member member, Long commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
 
         Comment findComment = optionalComment.orElseThrow(
