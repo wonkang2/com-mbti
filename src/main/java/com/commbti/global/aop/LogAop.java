@@ -21,21 +21,12 @@ public class LogAop {
     public void beforeParameterLog(JoinPoint joinPoint) {
         Method methodInfo = getMethod(joinPoint);
         log.trace("{}: 호출", methodInfo);
-
-        Object[] args = joinPoint.getArgs();
-        if (args.length < 1) {
-            log.debug("no parameter");
-        }
-        for (Object arg : args) {
-            log.debug("parameter - type = {} / value = {}", arg.getClass().getSimpleName(), arg);
-        }
     }
 
     @AfterReturning(value = "pointcut()", returning = "returnObj")
     public void afterReturnLog(JoinPoint joinPoint, Object returnObj) {
         Method methodInfo = getMethod(joinPoint);
 
-//        log.debug("return - type = {} / value = {}", returnObj.getClass().getSimpleName(), returnObj);
         log.trace("{}: 종료", methodInfo);
     }
 
