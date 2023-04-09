@@ -46,9 +46,6 @@ signupButton.addEventListener('click', function () {
  * @returns {boolean}
  */
 function validate(email, username, password1, password2, mbti) {
-    /**
-     * 필수값 및 비밀번호 일치 체크
-     */
     if ((email.value) === "") {
         alert("이메일을 입력해주세요.");
         email.focus();

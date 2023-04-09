@@ -1,5 +1,7 @@
-.section {
-  background-color: red;
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .section__article {
@@ -15,10 +17,9 @@
   flex-direction: column;
 }
 
-.section__article__form {
+.input__wrapper {
   display: flex;
   flex-direction: column;
-
 }
 
 .article__form {

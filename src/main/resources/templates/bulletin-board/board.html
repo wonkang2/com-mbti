@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="/css/common/page.css">
     <title>ComMBTI</title>
     <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
-
 </head>
 
 <body>
@@ -18,51 +17,51 @@
 </header>
 
 
-<section class="section">
-    <header class="section__header">게시판의 헤더부분
+<main class="main">
+    <header class="section__header">
         <div class="header__post">
-            <a th:href="'/bulletin-board/bulletins/post'" class="header__post__button">등록하기</a>
+            <a th:href="'/bulletin-board/bulletins/post'" class="header__post__button">글쓰기</a>
         </div>
     </header>
-    <article class="section__body">
-        <ul class="section__body__wrapper">
-            <li th:each="bulletin: ${boardPage.boardResponseDtoList}" class="section__body__wrapper__content">
-                <div th:unless="${bulletin.thumbnailPath == null}" class="body__wrapper__content__left">
-                    <a class="content__left__image"
-                       th:href="'/bulletin-board/bulletins/' + ${bulletin.id}">
-                        <img class="content__left__image__detail" th:src="@{''} + ${bulletin.thumbnailPath}"
-                             alt="사진">
-                    </a>
-                </div>
+    <section class="section">
+        <ul class="article__wrapper">
+            <li th:each="bulletin: ${boardPage.boardResponseDtoList}" class="article">
+                <a class="article__detail"
+                   th:href="'/bulletin-board/bulletins/' + ${bulletin.id}">
+                    <div th:unless="${bulletin.thumbnailPath == null}" class="article__detail__left__wrapper">
+                        <img class="article__detail__left__image" th:src="@{${bulletin.thumbnailPath}}">
+                    </div>
 
-                <div class="body__wrapper__content__right">
-                    <div th:text="${bulletin.mbtiType} " class="content__right__top">
-                        (작성자의 MBTI) INTJ
-                    </div>
-                    <div class="content__right__middle">
-                        <a th:text="${bulletin.title}"
-                           th:href="'/bulletin-board/bulletins/' + ${bulletin.id}"
-                           class="content__right__middle__header">게시글_제목</a>
-
-                        <a th:text="${bulletin.content}"
-                           th:href="'/bulletin-board/bulletins/' + ${bulletin.id}"
-                           href="./bulletin.html" class="content__right__middle__body">게시글_본문</a>
-                    </div>
-                    <div class="content__right__bottom">
-                        <div class="content__right__bottom__detail">
-                            <i class="fa-solid fa-eye"></i>
-                            <div th:text="${bulletin.viewCount}" class="comment__count__detail">(조회수) 5</div>
+                    <div class="article__detail__right__wrapper">
+                        <div class="article__detail__right__top">
+                            <div th:text="${bulletin.mbtiType} " class="right__top__info">
+                                (작성자의 MBTI) INTJ
+                            </div>
+                            <div th:text="${bulletin.title}" class="right__top__title">
+                                게시글_제목
+                            </div>
                         </div>
-                        <div class="content__right__bottom__detail">
-                            <i class="fa-solid fa-comment"></i>
-                            <div th:text="${bulletin.commentCount}" class="comment__count__detail">(댓글) 4</div>
+                        <div class="article__detail__right__middle">
+                            <div th:text="${bulletin.content}" class="right__middle__content">
+                                게시글_본문
+                            </div>
                         </div>
-                        <div class="content__right__bottom__detail">
-                            <i class="fa-solid fa-clock"></i>
-                            <div th:text="${bulletin.createdAt}" class="comment__count__detail"> 몇 분전</div>
+                        <div class="article__detail__right__bottom">
+                            <div class="right__bottom__info">
+                                <i class="fa-solid fa-eye"></i>
+                                <div th:text="${bulletin.viewCount}" class="right__bottom__info__detail">(조회수) 5</div>
+                            </div>
+                            <div class="right__bottom__info">
+                                <i class="fa-solid fa-comment"></i>
+                                <div th:text="${bulletin.commentCount}" class="right__bottom__info__detail">(댓글) 4</div>
+                            </div>
+                            <div class="right__bottom__info">
+                                <i class="fa-solid fa-clock"></i>
+                                <div th:text="${bulletin.createdAt}" class="right__bottom__info__detail"> 몇 분전</div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </li>
         </ul>
         <nav th:if="${boardPage.pageInfo.total} > 0" class="nav__pagination">
@@ -98,9 +97,9 @@
                 </li>
             </ul>
         </nav>
-    </article>
+    </section>
     <footer class="section__footer"></footer>
-</section>
+</main>
 
 </body>
 
