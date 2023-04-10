@@ -1,6 +1,8 @@
 package com.commbti.global.config;
 
 import com.commbti.global.security.handler.CustomFailureHandler;
+import com.commbti.global.security.handler.CustomSuccessHandler;
+import com.commbti.global.security.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,14 +23,19 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final CustomFailureHandler customFailureHandler;
-
+    private final AuthenticationService authenticationService;
+    @Bean
+    public CustomSuccessHandler customSuccessHandler() {
+        return new CustomSuccessHandler(authenticationService);
+    }
+    @Bean
+    public CustomFailureHandler customFailureHandler() {
+        return new CustomFailureHandler(authenticationService);
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -63,8 +70,8 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login-process")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/", true)
-                .failureHandler(customFailureHandler);
+                .successHandler(customSuccessHandler())
+                .failureHandler(customFailureHandler());
 
         http
                 .logout()
