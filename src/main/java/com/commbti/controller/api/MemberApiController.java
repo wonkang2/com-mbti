@@ -19,7 +19,7 @@ public class MemberApiController {
 
     @PostMapping("/signup")
     public ResponseEntity register(@RequestBody MemberSignupDto request) {
-        Long signup = memberService.save(request);
+        Long signup = memberService.signup(request);
         URI locationPath = URI.create("/login");
         return ResponseEntity.created(locationPath).build();
     }

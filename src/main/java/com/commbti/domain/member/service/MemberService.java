@@ -18,6 +18,13 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
+    public Long signup(MemberSignupDto request) {
+        Member createMember = Member.createMember(request.getEmail(), request.getUsername(), request.getPassword(), passwordEncoder, request.getMbti());
+        memberRepository.save(createMember);
+        return createMember.getId();
+    }
+
     public Member findMember(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member member = optionalMember.get(); // 예외 로직 추가 예정
@@ -29,10 +36,5 @@ public class MemberService {
                 () -> new UsernameNotFoundException("존재하지 않는 회원입니다. : " + username)
         );
     }
-    @Transactional
-    public Long save(MemberSignupDto request) {
-        Member createMember = Member.createMember(request.getEmail(), request.getUsername(), request.getPassword(), passwordEncoder, request.getMbti());
-        memberRepository.save(createMember);
-        return createMember.getId();
-    }
+
 }
