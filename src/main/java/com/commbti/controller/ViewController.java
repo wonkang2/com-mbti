@@ -1,7 +1,6 @@
 package com.commbti.controller;
 
 import com.commbti.domain.bulletinboard.dto.BoardPageDto;
-import com.commbti.domain.bulletinboard.dto.BulletinPostDto;
 import com.commbti.domain.bulletinboard.dto.BulletinResponseDto;
 import com.commbti.domain.bulletinboard.service.BoardService;
 import com.commbti.domain.bulletinboard.service.BulletinService;
