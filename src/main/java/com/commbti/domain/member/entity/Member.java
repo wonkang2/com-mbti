@@ -5,14 +5,21 @@ import com.commbti.global.base.DateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
-public class Member extends DateTime {
+public class Member extends DateTime implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -22,9 +29,12 @@ public class Member extends DateTime {
     private String password;
     @Enumerated(value = EnumType.STRING)
     private MbtiType mbtiType;
-
     @Enumerated(value = EnumType.STRING)
     private MemberRole role;
+    private Integer loginFailCount = 0;
+    private boolean isAccountNonLocked = true; // 계정 잠긴 여부
+    private LocalDateTime lastLoginDate; // 마지막 로그인 일자
+    private boolean isNonBlocked = true; // 관리자에 의한 차단여부
 
     private Member(String email, String username, String password, MbtiType mbtiType, MemberRole role) {
         this.email = email;
@@ -35,9 +45,59 @@ public class Member extends DateTime {
     }
 
     public static Member createMember(String email, String username, String password, PasswordEncoder passwordEncoder, MbtiType mbtiType) {
-        return new Member(email, username, passwordEncoder.encode(password), mbtiType,MemberRole.USER);
+        return new Member(email, username, passwordEncoder.encode(password), mbtiType,MemberRole.ROLE_USER);
     }
     public void updateMbtiType(MbtiType mbtiType) {
         this.mbtiType = mbtiType;
+    }
+
+    public void increaseLoginFailCount() {
+        if (loginFailCount > 4) {
+            isAccountNonLocked = false;
+            return;
+        }
+        this.loginFailCount ++;
+    }
+
+    public void updateLoginInfo() {
+        this.loginFailCount = 0;
+        this.lastLoginDate = LocalDateTime.now();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> auth = new ArrayList();
+        auth.add(new SimpleGrantedAuthority(getRole().toString()));
+        return auth;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.isAccountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

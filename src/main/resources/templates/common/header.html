@@ -25,6 +25,12 @@
             </div>
         </div>
         <div sec:authorize="isAuthenticated()" class="header__auth">
+            <div th:if="${#authentication.principal.role.toString().equals('ROLE_ADMIN')}" class="header__auth__login">
+                <a th:href="'/admin'" class="header__auth__link">관리자페이지</a>
+            </div>
+            <div th:unless="${#authentication.principal.role.toString().equals('ROLE_ADMIN')}" class="header__auth__login">
+                <a th:href="'/admin'" class="header__auth__link">마이페이지</a>
+            </div>
             <div class="header__auth__login">
                 <a th:href="'/logout'" class="header__auth__link">로그아웃</a>
             </div>

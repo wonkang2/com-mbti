@@ -41,11 +41,11 @@
                 <!--해당 게시글을 작성한 유저: 수정하기 삭제하기-->
                 <!--TODO:해당 게시글을 작성하지 않은 유저: 신고하기-->
                 <!--                <button onclick=report()>신고하기</button>-->
-                <button th:if="${#authorization.expr('isAuthenticated()')} and ${#authentication.principal.member.id} == ${bulletin.memberId}"
+                <button th:if="${#authorization.expr('isAuthenticated()')} and ${#authentication.principal.id} == ${bulletin.memberId}"
                         id="bulletinEditButton" class="content__header__right__detail">
                     수정하기
                 </button>
-                <button th:if="${#authorization.expr('isAuthenticated()')} and ${#authentication.principal.member.id} == ${bulletin.memberId}" class="content__header__right__detail"
+                <button th:if="${#authorization.expr('isAuthenticated()')} and ${#authentication.principal.id} == ${bulletin.memberId}" class="content__header__right__detail"
                         id="bulletinDeleteButton">
                     삭제하기
                 </button>
@@ -101,11 +101,11 @@
                         <div class="comment__header__right">
                             <!--해당 게시글을 작성한 유저: 수정하기 삭제하기-->
                             <!--TODO:해당 게시글을 작성하지 않은 유저: 신고하기-->
-                            <button th:if="${#authorization.expr('isAuthenticated()')} and ${#authentication.principal.member.id} == ${comment.memberId}"
+                            <button th:if="${#authorization.expr('isAuthenticated()')} and ${#authentication.principal.id} == ${comment.memberId}"
                                     th:data-comment-id="${comment.commentId}"
                                     class="comment__edit__button">수정하기
                             </button>
-                            <button th:if="${#authorization.expr('isAuthenticated()')} and ${#authentication.principal.member.id} == ${comment.memberId}"
+                            <button th:if="${#authorization.expr('isAuthenticated()')} and ${#authentication.principal.id} == ${comment.memberId}"
                                     th:data-comment-id="${comment.commentId}"
                                     class="comment__delete__button">
                                 삭제하기

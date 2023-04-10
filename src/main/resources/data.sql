@@ -1,9 +1,9 @@
-insert into member (created_at, last_modified_at, email, mbti_type, password, role, username)
-values ('2023-03-29T14:54:08.055012', '2023-03-29T14:54:08.055012', 'test1@gmail.com', 'INTJ', '$2a$10$Mlwlm2jQx4dkRigIxwOlyu9S0xKKKAvuBOHwXDDpUww4pSYpLhR9S', 'USER', 'test1'),
-       ('2023-03-29T14:54:08.055012', '2023-03-29T14:54:08.055012', 'test2@gmail.com', 'ENTP', '$2a$10$Mlwlm2jQx4dkRigIxwOlyu9S0xKKKAvuBOHwXDDpUww4pSYpLhR9S', 'USER', 'test2'),
-       ('2023-03-29T14:54:08.055012', '2023-03-29T14:54:08.055012', 'test3@gmail.com', 'ISFJ', '$2a$10$Mlwlm2jQx4dkRigIxwOlyu9S0xKKKAvuBOHwXDDpUww4pSYpLhR9S', 'USER', 'test3'),
-       ('2023-03-29T14:54:08.055012', '2023-03-29T14:54:08.055012', 'test4@gmail.com', 'INFP', '$2a$10$Mlwlm2jQx4dkRigIxwOlyu9S0xKKKAvuBOHwXDDpUww4pSYpLhR9S', 'USER', 'test4'),
-       ('2023-03-29T14:54:08.055012', '2023-03-29T14:54:08.055012', 'test5@gmail.com', 'ESFP', '$2a$10$Mlwlm2jQx4dkRigIxwOlyu9S0xKKKAvuBOHwXDDpUww4pSYpLhR9S', 'USER', 'test5');
+insert into member (created_at, last_modified_at, email, mbti_type, password, role, username, login_fail_count, is_account_non_locked, is_non_blocked)
+values ('2023-03-29T14:54:08.055012', '2023-03-29T14:54:08.055012', 'wonkang96@gmail.com', 'INTJ', '$2a$10$ZqmhBIyiV1MbxQHxA6u/huhIeHOncjVYcupJ.WUBzTzoPGZsrVMaG', 'ROLE_ADMIN', 'admin', 0, true, true),
+       ('2023-03-29T14:54:08.055012', '2023-03-29T14:54:08.055012', 'test2@gmail.com', 'ENTP', '$2a$10$Mlwlm2jQx4dkRigIxwOlyu9S0xKKKAvuBOHwXDDpUww4pSYpLhR9S', 'ROLE_USER', 'test2', 0, true, true),
+       ('2023-03-29T14:54:08.055012', '2023-03-29T14:54:08.055012', 'test3@gmail.com', 'ISFJ', '$2a$10$Mlwlm2jQx4dkRigIxwOlyu9S0xKKKAvuBOHwXDDpUww4pSYpLhR9S', 'ROLE_USER', 'test3', 0, true, true),
+       ('2023-03-29T14:54:08.055012', '2023-03-29T14:54:08.055012', 'test4@gmail.com', 'INFP', '$2a$10$Mlwlm2jQx4dkRigIxwOlyu9S0xKKKAvuBOHwXDDpUww4pSYpLhR9S', 'ROLE_USER', 'test4', 0, true, true),
+       ('2023-03-29T14:54:08.055012', '2023-03-29T14:54:08.055012', 'test5@gmail.com', 'ESFP', '$2a$10$Mlwlm2jQx4dkRigIxwOlyu9S0xKKKAvuBOHwXDDpUww4pSYpLhR9S', 'ROLE_USER', 'test5', 0, true, true);
 
 insert into bulletin(title, content, thumbnail_path, view_count, member_id, created_at)
 values ('댓글', '테스트용 댓글 많은 게시글', null, 120,  1, '2023-03-29T14:54:08.055012'),
