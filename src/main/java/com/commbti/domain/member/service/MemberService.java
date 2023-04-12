@@ -1,5 +1,7 @@
 package com.commbti.domain.member.service;
 
+import com.commbti.domain.member.dto.MemberPatchDto;
+import com.commbti.domain.member.dto.MemberResponseDto;
 import com.commbti.domain.member.dto.MemberSignupDto;
 import com.commbti.domain.member.entity.Member;
 import com.commbti.domain.member.repository.MemberRepository;
@@ -25,11 +27,17 @@ public class MemberService {
         return createMember.getId();
     }
 
-    public Member findMember(Long memberId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        Member member = optionalMember.get(); // 예외 로직 추가 예정
-        return member;
+    @Transactional
+    public MemberResponseDto modify(Member member, Long memberId, MemberPatchDto request) {
+        if (!member.getId().equals(memberId)) {
+            throw new IllegalArgumentException("접근권한이 없습니다.");
+        }
+        member.modifyInfo(request.getPassword(), passwordEncoder, request.getMbtiType());
+        memberRepository.save(member);
+
+        return member.toResponseDto();
     }
+
 
     public Member findMember(String username) {
         return memberRepository.findByUsername(username).orElseThrow(

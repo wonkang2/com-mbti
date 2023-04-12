@@ -17,24 +17,27 @@
             </a>
         </div>
         <div sec:authorize="not isAuthenticated()" class="header__auth">
-            <div class="header__auth__login">
-                <a th:href="'/login'" class="header__auth__link">로그인</a>
-            </div>
             <div class="header__auth__signup">
                 <a th:href="'/signup'" class="header__auth__link">회원가입</a>
+            </div>
+            <div class="header__auth__login">
+                <a th:href="'/login'" class="header__auth__link">로그인</a>
             </div>
         </div>
         <div sec:authorize="isAuthenticated()" class="header__auth">
             <div th:if="${#authentication.principal.role.toString().equals('ROLE_ADMIN')}" class="header__auth__login">
-                <a th:href="'/admin'" class="header__auth__link">관리자페이지</a>
+                <a th:href="'/admin'" class="header__auth__link">
+                    관리자페이지
+                </a>
             </div>
             <div th:unless="${#authentication.principal.role.toString().equals('ROLE_ADMIN')}" class="header__auth__login">
-                <a th:href="'/admin'" class="header__auth__link">마이페이지</a>
+                <a th:href="'/members/' + ${#authentication.principal.id} + '/edit'" class="header__auth__link">
+                    내정보수정
+                </a>
             </div>
             <div class="header__auth__login">
                 <a th:href="'/logout'" class="header__auth__link">로그아웃</a>
             </div>
-<!--            TODO: 내정보-->
         </div>
     </header>
 

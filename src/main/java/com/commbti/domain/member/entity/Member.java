@@ -2,6 +2,8 @@ package com.commbti.domain.member.entity;
 
 
 import com.commbti.domain.admin.dto.AdminMemberResponseDto;
+import com.commbti.domain.member.dto.MemberPatchDto;
+import com.commbti.domain.member.dto.MemberResponseDto;
 import com.commbti.global.base.DateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -48,8 +51,11 @@ public class Member extends DateTime implements UserDetails {
     public static Member createMember(String email, String username, String password, PasswordEncoder passwordEncoder, MbtiType mbtiType) {
         return new Member(email, username, passwordEncoder.encode(password), mbtiType,MemberRole.ROLE_USER);
     }
-    public void updateMbtiType(MbtiType mbtiType) {
-        this.mbtiType = mbtiType;
+    public void modifyInfo(String newPassword, PasswordEncoder passwordEncoder, MbtiType newMbtiType) {
+        Optional.ofNullable(newPassword)
+                .ifPresent(password -> this.password = passwordEncoder.encode(password));
+        Optional.ofNullable(newMbtiType)
+                .ifPresent(mbtiType -> this.mbtiType = mbtiType);
     }
 
     // 로그인 실패 횟수 증가(로그인 실패 시 호출)
@@ -88,6 +94,15 @@ public class Member extends DateTime implements UserDetails {
                 .lastLoginDate(lastLoginDate)
                 .isAccountNonLocked(isAccountNonLocked)
                 .isNonBlocked(isNonBlocked)
+                .build();
+    }
+
+    public MemberResponseDto toResponseDto() {
+        return MemberResponseDto.builder()
+                .memberId(id)
+                .email(email)
+                .username(username)
+                .mbtiType(mbtiType)
                 .build();
     }
 

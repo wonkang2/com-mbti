@@ -5,10 +5,13 @@ import com.commbti.domain.bulletinboard.service.BoardService;
 import com.commbti.domain.bulletinboard.service.BulletinService;
 import com.commbti.domain.comment.dto.CommentResponseDto;
 import com.commbti.domain.comment.service.CommentService;
+import com.commbti.domain.member.dto.MemberResponseDto;
 import com.commbti.domain.member.dto.MemberSignupDto;
+import com.commbti.domain.member.entity.Member;
 import com.commbti.domain.member.service.MemberService;
 import com.commbti.global.page.PageResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,12 +46,18 @@ public class ViewController {
         return "/auth/signup";
     }
 
-//    @GetMapping("/members/{memberId}/edit")
-//    public String getMemberEditPage(@AuthenticationPrincipal Member,
-//                                    @PathVariable Long memberId,
-//                                    Model model) {
-//
-//    }
+    @GetMapping("/members/{memberId}/edit")
+    public String getMemberEditPage(@AuthenticationPrincipal Member member,
+                                    @PathVariable Long memberId,
+                                    Model model) {
+        if (!member.getId().equals(memberId)) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+        MemberResponseDto response = member.toResponseDto();
+        model.addAttribute("member", response);
+
+        return "/auth/edit";
+    }
 
     @GetMapping("/bulletin-board")
     public String getBoardPage(@RequestParam("page") int page,
