@@ -1,5 +1,6 @@
 package com.commbti.domain.comment.entity;
 
+import com.commbti.domain.admin.dto.AdminCommentResponseDto;
 import com.commbti.domain.bulletinboard.entity.Bulletin;
 import com.commbti.domain.comment.dto.CommentResponseDto;
 import com.commbti.domain.member.entity.Member;
@@ -46,4 +47,14 @@ public class Comment extends DateTime {
         return new CommentResponseDto(this.getMember().getId(),this.id, this.member.getMbtiType(), this.content, this.getCreatedAt());
     }
 
+    public AdminCommentResponseDto toAdminResponseDto() {
+        return AdminCommentResponseDto.builder()
+                .id(id)
+                .memberId(member.getId())
+                .username(getMember().getUsername())
+                .content(content)
+                .createdAt(getCreatedAt())
+                .lastModifiedAt(getModifiedAt())
+                .build();
+    }
 }

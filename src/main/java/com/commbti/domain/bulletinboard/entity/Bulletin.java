@@ -1,5 +1,6 @@
 package com.commbti.domain.bulletinboard.entity;
 
+import com.commbti.domain.admin.dto.AdminBulletinResponseDto;
 import com.commbti.domain.bulletinboard.dto.BoardResponseDto;
 import com.commbti.domain.bulletinboard.dto.BulletinResponseDto;
 import com.commbti.domain.file.entity.ImageFile;
@@ -92,5 +93,18 @@ public class Bulletin extends DateTime {
                 .commentCount(this.commentCount)
                 .thumbnailPath(this.thumbnailPath)
                 .build();
+    }
+
+    public AdminBulletinResponseDto toAdminResponseDto() {
+        return AdminBulletinResponseDto.builder()
+                .id(id)
+                .memberId(member.getId())
+                .username(member.getUsername())
+                .title(title)
+                .content(content)
+                .createdAt(getCreatedAt())
+                .lastModifiedAt(getModifiedAt())
+                .viewCount(viewCount)
+                .commentCount(commentCount).build();
     }
 }

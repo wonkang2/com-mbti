@@ -1,0 +1,57 @@
+main {
+    width: 100%;
+}
+
+section {
+    width: 100%;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 10px;
+}
+th {
+    height: 40px;
+    border-bottom: 1px solid #445566;
+    background-color: #445566;
+    color: white;
+    vertical-align: center;
+}
+
+td {
+    vertical-align: center;
+}
+
+.content, .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+th, td {
+    border-bottom: 1px solid #445566;
+    text-align: center;
+    height: 40px;
+}
+
+.function__wrapper, .number__wrapper {
+    width: 50px;
+}
+
+.contentButton__wrapper {
+    padding: 5px 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav__wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 300px;
+    height: 30px;
+}

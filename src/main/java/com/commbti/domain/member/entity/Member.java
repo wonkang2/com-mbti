@@ -1,6 +1,7 @@
 package com.commbti.domain.member.entity;
 
 
+import com.commbti.domain.admin.dto.AdminMemberResponseDto;
 import com.commbti.global.base.DateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -51,6 +52,7 @@ public class Member extends DateTime implements UserDetails {
         this.mbtiType = mbtiType;
     }
 
+    // 로그인 실패 횟수 증가(로그인 실패 시 호출)
     public void increaseLoginFailCount() {
         if (loginFailCount > 4) {
             isAccountNonLocked = false;
@@ -59,9 +61,34 @@ public class Member extends DateTime implements UserDetails {
         this.loginFailCount ++;
     }
 
+    // 로그인 관련된 필드 업데이트(로그인 성공 시 호출)
     public void updateLoginInfo() {
         this.loginFailCount = 0;
         this.lastLoginDate = LocalDateTime.now();
+    }
+
+    // 차단 여부 업데이트
+    public void updateBlockStatus() {
+        if (isNonBlocked) {
+            this.isNonBlocked = false;
+        } else {
+            this.isNonBlocked = true;
+        }
+    }
+
+
+    // ############################ toDTO ############################
+    public AdminMemberResponseDto toAdminResponseDto() {
+        return AdminMemberResponseDto.builder()
+                .id(id)
+                .email(email)
+                .username(username)
+                .mbtiType(mbtiType)
+                .role(role)
+                .lastLoginDate(lastLoginDate)
+                .isAccountNonLocked(isAccountNonLocked)
+                .isNonBlocked(isNonBlocked)
+                .build();
     }
 
     @Override

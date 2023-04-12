@@ -1,0 +1,26 @@
+.contentButton, .nav__member, .nav__bulletin, .nav__comment {
+    text-decoration: none;
+    background-color: white;
+    border: 1px solid #445566;
+    border-radius: 5px;
+    color: #445566;
+    font-size: 14px;
+    font-weight: 400;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.contentButton:hover, .nav__member:hover, .nav__bulletin:hover, .nav__comment:hover {
+    background-color: #445566;
+    color: white;
+}
+
+.nav__member, .nav__bulletin, .nav__comment {
+    border-bottom: none;
+    border-radius: 0;
+    margin-left: 5px;
+}

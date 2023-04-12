@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/admin/body.css">
+    <link rel="stylesheet" href="/css/admin/elements.css">
+    <link rel="stylesheet" href="/css/common/layout.css">
+    <link rel="stylesheet" href="/css/common/page.css">
+    <title>ComMBTI</title>
+    <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<header th:replace="~{common/header :: header}">
+    페이지의 헤더 부분
+</header>
+<main class="main">
+    <header class="section__header">
+        <div class="nav__wrapper">
+            <a th:href="'/admin/members'" class="nav__member">회원 관리</a>
+            <a th:href="'/admin/bulletins'" class="nav__bulletin">게시글 관리</a>
+            <a th:href="'/admin/comments'" class="nav__comment">댓글 관리</a>
+        </div>
+    </header>
+    <section>
+        <table>
+            <thead>
+            <th class="number__wrapper">번호</th>
+            <th>이메일</th>
+            <th>아이디</th>
+            <th>MBTI</th>
+            <th>권한</th>
+            <th>마지막 로그인 시간</th>
+            <th>잠김 여부</th>
+            <th class="function__wrapper">차단</th>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${memberPage.pageContents}">
+                <td th:text="${member.id}" class="number__wrapper"></td>
+                <td th:text="${member.email}"></td>
+                <td th:text="${member.username}"></td>
+                <td th:text="${member.mbtiType}"></td>
+                <td th:text="${member.role}"></td>
+                <td th:text="${#temporals.format(member.lastLoginDate, 'yyyy년 MM월 dd일 HH시 mm분')}"></td>
+                <td th:text="${!member.isAccountNonLocked()}"></td>
+                <td class="function__wrapper">
+                    <div th:unless="${member.id} == 1" class="contentButton__wrapper">
+                        <a th:if="${member.isNonBlocked()}" th:href="'/admin/members/' + ${member.id} + '/block'" class="contentButton">차단</a>
+                        <a th:unless="${member.isNonBlocked()}" th:href="'/admin/members/' + ${member.id} + '/block'" class="contentButton">해제</a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <nav th:if="${memberPage.pageInfo.total} > 0" class="nav__pagination">
+            <ul class="pagination"
+                th:with="start=${memberPage.pageInfo.startNumber}, end=${memberPage.pageInfo.endNumber}">
+                <li class="pagination__wrapper" th:if="${start > 1}">
+                    <a class="pagination__btn" th:href="@{/admin/members(page=${start} - 10, size=10)}"
+                       th:text="'<<'"></a>
+                </li>
+                <li class="pagination__wrapper" th:if="${memberPage.pageInfo.hasPreviousPage}">
+                    <a class="pagination__btn"
+                       th:href="@{/admin/members(page=${memberPage.pageInfo.currentPage} - 1, size=10)}"
+                       th:text="'<'"></a>
+                </li>
+
+                <li class="pagination__wrapper" th:each="page: ${#numbers.sequence(start, end)}">
+                    <a th:if="${page} == ${memberPage.getPageInfo().currentPage}" id="pagination_button_current"
+                       class="pagination__btn" th:text="${page}"
+                       th:href="@{/admin/members(page=${page}, size=10)}"></a>
+                    <a th:unless="${page} == ${memberPage.getPageInfo().currentPage}" class="pagination__btn"
+                       th:text="${page}"
+                       th:href="@{/admin/members(page=${page}, size=10)}"></a>
+                </li>
+
+                <li class="pagination__wrapper" th:if="${memberPage.pageInfo.hasNextPage}">
+                    <a class="pagination__btn"
+                       th:href="@{/admin/members(page=${memberPage.pageInfo.currentPage} + 1, size=10)}"
+                       th:text="'>'"></a>
+                </li>
+                <li class="pagination__wrapper" th:if="${end < memberPage.pageInfo.totalPage}">
+                    <a class="pagination__btn" th:href="@{/admin/members(page=${end} + 10, size=10)}"
+                       th:text="'>>'"></a>
+                </li>
+            </ul>
+        </nav>
+    </section>
+    <footer class="section__footer"></footer>
+</main>
+
+</body>
+
+</html>
