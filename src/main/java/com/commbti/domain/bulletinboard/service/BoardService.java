@@ -1,8 +1,9 @@
 package com.commbti.domain.bulletinboard.service;
 
-import com.commbti.domain.bulletinboard.dto.BoardPageDto;
+import com.commbti.domain.bulletinboard.dto.BulletinResponseDto;
 import com.commbti.domain.bulletinboard.entity.Bulletin;
 import com.commbti.domain.bulletinboard.repository.BulletinBoardRepository;
+import com.commbti.global.page.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,12 +20,12 @@ public class BoardService {
     private final BulletinBoardRepository bulletinBoardRepository;
 
     // 게시글 조회(전체)
-    public BoardPageDto findBoardPage(int page, int size) {
+    public PageResponseDto<BulletinResponseDto> findBulletinPage(int page, int size) {
         // 기본값: page=0; size= 10;
         PageRequest pageRequest = PageRequest.of(page - 1, size);
-        Page<Bulletin> boardPage = bulletinBoardRepository.findPageWithMemberMbti(pageRequest);
+        Page<Bulletin> bulletinPage = bulletinBoardRepository.findPageWithMemberMbti(pageRequest);
 
-        BoardPageDto response = BoardPageDto.toPageDto(boardPage);
+        PageResponseDto<BulletinResponseDto> response = PageResponseDto.toBulletinPage(bulletinPage);
 
         return response;
     }

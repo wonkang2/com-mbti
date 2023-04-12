@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bulletin-board/board.css">
     <link rel="stylesheet" href="/css/common/layout.css">
-    <link rel="stylesheet" href="/css/common/header.css">
     <link rel="stylesheet" href="/css/common/page.css">
     <title>ComMBTI</title>
     <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
@@ -25,7 +24,7 @@
     </header>
     <section class="section">
         <ul class="article__wrapper">
-            <li th:each="bulletin: ${boardPage.boardResponseDtoList}" class="article">
+            <li th:each="bulletin: ${bulletinPage.pageContents}" class="article">
                 <a class="article__detail"
                    th:href="'/bulletin-board/bulletins/' + ${bulletin.id}">
                     <div th:unless="${bulletin.thumbnailPath == null}" class="article__detail__left__wrapper">
@@ -64,34 +63,34 @@
                 </a>
             </li>
         </ul>
-        <nav th:if="${boardPage.pageInfo.total} > 0" class="nav__pagination">
+        <nav th:with="pageInfo = ${bulletinPage.pageInfo}" th:if="${bulletinPage.pageInfo.total} > 0" class="nav__pagination">
             <ul class="pagination"
-                th:with="start=${boardPage.pageInfo.startNumber}, end=${boardPage.pageInfo.endNumber}">
+                th:with="start=${pageInfo.startNumber}, end=${pageInfo.endNumber}">
                 <li class="pagination__wrapper" th:if="${start > 1}">
                     <a class="pagination__btn" th:href="@{/bulletin-board(page=${start} - 10, size=10)}"
                        th:text="'<<'"></a>
                 </li>
-                <li class="pagination__wrapper" th:if="${boardPage.pageInfo.hasPreviousPage}">
+                <li class="pagination__wrapper" th:if="${pageInfo.hasPreviousPage}">
                     <a class="pagination__btn"
-                       th:href="@{/bulletin-board(page=${boardPage.pageInfo.currentPage} - 1, size=10)}"
+                       th:href="@{/bulletin-board(page=${pageInfo.currentPage} - 1, size=10)}"
                        th:text="'<'"></a>
                 </li>
 
                 <li class="pagination__wrapper" th:each="page: ${#numbers.sequence(start, end)}">
-                    <a th:if="${page} == ${boardPage.getPageInfo().currentPage}" id="pagination_button_current"
+                    <a th:if="${page} == ${pageInfo.currentPage}" id="pagination_button_current"
                        class="pagination__btn" th:text="${page}"
                        th:href="@{/bulletin-board(page=${page}, size=10)}"></a>
-                    <a th:unless="${page} == ${boardPage.getPageInfo().currentPage}" class="pagination__btn"
+                    <a th:unless="${page} == ${pageInfo.currentPage}" class="pagination__btn"
                        th:text="${page}"
                        th:href="@{/bulletin-board(page=${page}, size=10)}"></a>
                 </li>
 
-                <li class="pagination__wrapper" th:if="${boardPage.pageInfo.hasNextPage}">
+                <li class="pagination__wrapper" th:if="${pageInfo.hasNextPage}">
                     <a class="pagination__btn"
-                       th:href="@{/bulletin-board(page=${boardPage.pageInfo.currentPage} + 1, size=10)}"
+                       th:href="@{/bulletin-board(page=${pageInfo.currentPage} + 1, size=10)}"
                        th:text="'>'"></a>
                 </li>
-                <li class="pagination__wrapper" th:if="${end < boardPage.pageInfo.totalPage}">
+                <li class="pagination__wrapper" th:if="${end < pageInfo.totalPage}">
                     <a class="pagination__btn" th:href="@{/bulletin-board(page=${end} + 10, size=10)}"
                        th:text="'>>'"></a>
                 </li>

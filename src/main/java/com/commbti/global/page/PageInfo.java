@@ -1,10 +1,12 @@
 package com.commbti.global.page;
 
+import com.commbti.domain.bulletinboard.entity.Bulletin;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 @Getter

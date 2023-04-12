@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bulletin-board/bulletin.css">
-    <link rel="stylesheet" href="/css/common/header.css">
     <link rel="stylesheet" href="/css/common/page.css">
     <link rel="stylesheet" href="/css/common/layout.css">
     <title>ComMBTI</title>
@@ -86,7 +85,7 @@
                 <div th:text="${commentPage.getPageInfo().getTotal()}" class="comment__count__detail">댓글 4</div>
             </div>
             <ul class="section__footer__comment__wrapper">
-                <li th:each="comment: ${commentPage.commentResponseDtoList}" class="comment__wrapper"
+                <li th:each="comment: ${commentPage.pageContents}" class="comment__wrapper"
                     th:id="${comment.commentId}">
                     <div class="comment__header">
                         <div class="comment__header__left">
@@ -125,35 +124,35 @@
 
                 </li>
             </ul>
-            <nav th:if="${commentPage.pageInfo.total} > 0" class="nav__pagination">
+            <nav th:with="pageInfo = ${commentPage.pageInfo}" th:if="${commentPage.pageInfo.total} > 0" class="nav__pagination">
                 <ul class="pagination"
-                    th:with="start=${commentPage.pageInfo.startNumber}, end=${commentPage.pageInfo.endNumber}">
+                    th:with="start=${pageInfo.startNumber}, end=${pageInfo.endNumber}">
                     <li class="pagination__wrapper" th:if="${start > 1}">
                         <a class="pagination__btn"
                            th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${start} - 10, size=10)}"
                            th:text="'<<'"></a>
                     </li>
-                    <li class="pagination__wrapper" th:if="${commentPage.pageInfo.hasPreviousPage}">
+                    <li class="pagination__wrapper" th:if="${pageInfo.hasPreviousPage}">
                         <a class="pagination__btn"
-                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${commentPage.pageInfo.currentPage} - 1, size=10)}"
+                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${pageInfo.currentPage} - 1, size=10)}"
                            th:text="'<'"></a>
                     </li>
 
                     <li class="pagination__wrapper" th:each="page: ${#numbers.sequence(start, end)}">
-                        <a th:if="${page} == ${commentPage.pageInfo.currentPage}" id="pagination_button_current"
+                        <a th:if="${page} == ${pageInfo.currentPage}" id="pagination_button_current"
                            class="pagination__btn" th:text="${page}"
                            th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${page}, size=10)}"></a>
-                        <a th:unless="${page} == ${commentPage.pageInfo.currentPage}" class="pagination__btn"
+                        <a th:unless="${page} == ${pageInfo.currentPage}" class="pagination__btn"
                            th:text="${page}"
                            th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${page}, size=10)}"></a>
                     </li>
 
-                    <li class="pagination__wrapper" th:if="${commentPage.pageInfo.hasNextPage}">
+                    <li class="pagination__wrapper" th:if="${pageInfo.hasNextPage}">
                         <a class="pagination__btn"
-                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${commentPage.pageInfo.currentPage} + 1, size=10)}"
+                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${pageInfo.currentPage} + 1, size=10)}"
                            th:text="'>'"></a>
                     </li>
-                    <li class="pagination__wrapper" th:if="${end < commentPage.pageInfo.totalPage}">
+                    <li class="pagination__wrapper" th:if="${end < pageInfo.totalPage}">
                         <a class="pagination__btn"
                            th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${end} + 10, size=10)}"
                            th:text="'>>'"></a>

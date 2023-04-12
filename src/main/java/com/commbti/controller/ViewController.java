@@ -1,13 +1,13 @@
 package com.commbti.controller;
 
-import com.commbti.domain.bulletinboard.dto.BoardPageDto;
 import com.commbti.domain.bulletinboard.dto.BulletinResponseDto;
 import com.commbti.domain.bulletinboard.service.BoardService;
 import com.commbti.domain.bulletinboard.service.BulletinService;
-import com.commbti.domain.comment.dto.CommentPageDto;
-import com.commbti.domain.comment.dto.CommentRequestDto;
+import com.commbti.domain.comment.dto.CommentResponseDto;
 import com.commbti.domain.comment.service.CommentService;
 import com.commbti.domain.member.dto.MemberSignupDto;
+import com.commbti.domain.member.service.MemberService;
+import com.commbti.global.page.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ViewController {
 
     private static final int BOARD_SIZE = 10;
+    private final MemberService memberService;
     private final BoardService boardService;
     private final BulletinService bulletinService;
     private final CommentService commentService;
@@ -42,12 +43,19 @@ public class ViewController {
         return "/auth/signup";
     }
 
+//    @GetMapping("/members/{memberId}/edit")
+//    public String getMemberEditPage(@AuthenticationPrincipal Member,
+//                                    @PathVariable Long memberId,
+//                                    Model model) {
+//
+//    }
+
     @GetMapping("/bulletin-board")
     public String getBoardPage(@RequestParam("page") int page,
                                @RequestParam("size") int size,
                                Model model) {
-        BoardPageDto response = boardService.findBoardPage(page, BOARD_SIZE);
-        model.addAttribute("boardPage", response);
+        PageResponseDto<BulletinResponseDto> bulletinPage = boardService.findBulletinPage(page, BOARD_SIZE);
+        model.addAttribute("bulletinPage", bulletinPage);
         return "/bulletin-board/board";
     }
 
@@ -60,12 +68,10 @@ public class ViewController {
     public String getBulletin(@PathVariable("bulletin-id") Long bulletinId,
                               Model model) {
         BulletinResponseDto bulletinResponse = bulletinService.findOne(bulletinId);
-        CommentPageDto commentResponse = commentService.findCommentPageByBulletinId(bulletinId, 1, 10);
-        CommentRequestDto commentRequestDto = new CommentRequestDto();
+        PageResponseDto<CommentResponseDto> commentResponse = commentService.findCommentPageByBulletinId(bulletinId, 1, 10);
 
         model.addAttribute("bulletin", bulletinResponse);
         model.addAttribute("commentPage", commentResponse);
-        model.addAttribute(commentRequestDto);
         return "/bulletin-board/bulletin";
     }
 
@@ -79,16 +85,14 @@ public class ViewController {
 
     @GetMapping("/bulletin-board/bulletins/{bulletin-id}/comments")
     public String getBulletin(@PathVariable("bulletin-id") Long bulletinId,
-                              @RequestParam int page,
-                              @RequestParam int size,
+                              @RequestParam(defaultValue = "1") int page,
+                              @RequestParam(defaultValue = "10") int size,
                               Model model) {
         BulletinResponseDto bulletinResponse = bulletinService.findOne(bulletinId);
-        CommentPageDto commentResponse = commentService.findCommentPageByBulletinId(bulletinId, page, size);
-        CommentRequestDto commentRequestDto = new CommentRequestDto();
+        PageResponseDto<CommentResponseDto> commentResponse = commentService.findCommentPageByBulletinId(bulletinId, page, size);
 
         model.addAttribute("bulletin", bulletinResponse);
         model.addAttribute("commentPage", commentResponse);
-        model.addAttribute(commentRequestDto);
         return "/bulletin-board/bulletin";
     }
 

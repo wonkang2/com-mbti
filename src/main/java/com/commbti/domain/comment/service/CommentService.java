@@ -2,13 +2,12 @@ package com.commbti.domain.comment.service;
 
 import com.commbti.domain.bulletinboard.entity.Bulletin;
 import com.commbti.domain.bulletinboard.service.BulletinService;
-import com.commbti.domain.comment.dto.CommentPageDto;
 import com.commbti.domain.comment.dto.CommentRequestDto;
 import com.commbti.domain.comment.dto.CommentResponseDto;
 import com.commbti.domain.comment.entity.Comment;
 import com.commbti.domain.comment.repository.CommentRepository;
 import com.commbti.domain.member.entity.Member;
-import com.commbti.domain.member.service.MemberService;
+import com.commbti.global.page.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,9 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -42,11 +39,11 @@ public class CommentService {
 
     // 게시글에 해당하는 댓글 조회
     @Transactional(readOnly = true)
-    public CommentPageDto findCommentPageByBulletinId(Long bulletinId, int page, int size) {
+    public PageResponseDto<CommentResponseDto> findCommentPageByBulletinId(Long bulletinId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         Page<Comment> commentPage = commentRepository.findPageWithMemberMbtiByBulletinId(bulletinId, pageRequest);
 
-        CommentPageDto response = CommentPageDto.toPageDto(commentPage);
+        PageResponseDto<CommentResponseDto> response = PageResponseDto.toCommentPage(commentPage);
         return response;
     }
 
