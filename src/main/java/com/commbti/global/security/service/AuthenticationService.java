@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Transactional
 @RequiredArgsConstructor
@@ -19,9 +21,11 @@ public class AuthenticationService {
 
 
     public void increaseLoginFailCount(String username) {
-        Member foundMember = memberRepository.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException("존재하지 않는 회원입니다. : " + username));
-        foundMember.increaseLoginFailCount();
+        Optional<Member> optionalMember = memberRepository.findByUsername(username);
+        if (optionalMember.isEmpty()) {
+            return;
+        }
+        optionalMember.get().increaseLoginFailCount();
     }
 
     public void initLogin(String username) {
