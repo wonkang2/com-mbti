@@ -7,7 +7,6 @@ import com.commbti.domain.bulletinboard.entity.Bulletin;
 import com.commbti.domain.bulletinboard.repository.BulletinBoardRepository;
 import com.commbti.domain.file.service.ImageFileService;
 import com.commbti.domain.member.entity.Member;
-import com.commbti.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +21,6 @@ import java.util.Optional;
 public class BulletinService {
 
     private final BulletinBoardRepository bulletinBoardRepository;
-    private final MemberService memberService;
     private final ImageFileService imageFileService;
 
     // 게시글 등록
