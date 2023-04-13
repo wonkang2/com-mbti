@@ -87,7 +87,7 @@ function validate(email, username, password1, password2, mbti) {
      * 유효성 검증
      */
     // 아이디 정규화 공식
-    let usernameRegulation = /^[a-zA-Z0-9]{4,12}$/;
+    let usernameRegulation = /^[a-zA-Z0-9]{6,12}$/;
 
     // 비밀번호 정규화: 최소 8자 최대 16자, 문자/숫자/특수문자 최소 1개 이상,
     let passwordRegulation = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
@@ -97,7 +97,7 @@ function validate(email, username, password1, password2, mbti) {
     if(!check(emailRegulation, email, "이메일을 다시 확인해주세요.")) {
         return false;
     };
-    if (!check(usernameRegulation, username, "아이디는 영문과 숫자로 4~12자까지 입력가능합니다.")) {
+    if (!check(usernameRegulation, username, "아이디는 영문과 숫자로 6~12자까지 입력가능합니다.")) {
         return false;
     };
     if (!check(passwordRegulation, password1, "비밀번호는 영문과 숫자, 특수문자 조합으로 최소8자 최대16자까지 가능합니다.")) {
