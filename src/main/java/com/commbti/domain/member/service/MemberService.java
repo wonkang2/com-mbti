@@ -6,6 +6,7 @@ import com.commbti.domain.member.dto.MemberSignupDto;
 import com.commbti.domain.member.entity.Member;
 import com.commbti.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,13 @@ public class MemberService {
         memberRepository.save(member);
 
         return member.toResponseDto();
+    }
+
+    public MemberResponseDto findOneByEmail(String email) {
+        Member foundMember = memberRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다.")
+        );
+        return foundMember.toResponseDto();
     }
 
 

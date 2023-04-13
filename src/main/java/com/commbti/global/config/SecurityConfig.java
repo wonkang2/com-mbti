@@ -62,7 +62,7 @@ public class SecurityConfig {
                         .antMatchers("/admin/**").hasAnyRole("ADMIN")
                         .antMatchers("/bulletin-board/*/edit", "/bulletin-board/*/post").authenticated()
                         .antMatchers(HttpMethod.GET, "/bulletin-board/**", "/comments/**", "/login/**", "/").permitAll()
-                        .antMatchers("/api/signup", "/signup/**").permitAll()
+                        .antMatchers("/api/signup", "/signup/**", "/api/members").permitAll()
                         .anyRequest().authenticated());
         http
                 .formLogin()
