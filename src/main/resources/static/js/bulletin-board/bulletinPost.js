@@ -4,17 +4,17 @@ postButton.addEventListener('click', function () {
     let title = document.getElementById('title').value;
     let content = document.getElementById('content').value;
     let files = document.getElementById('files').files;
-    console.log("title: ", title.value);
-    console.log("content: ", content.value);
-    console.log("files: ", files.files);
+    console.log("title: ", title);
+    console.log("content: ", content);
+    console.log("files: ", files);
     if(!validate(title, content)) {
         return false;
     }
     console.log("입력값 검증 완료");
 
     let formData = new FormData();
-    formData.append("title", title.value);
-    formData.append("content", content.value);
+    formData.append("title", title);
+    formData.append("content", content);
     for (let i = 0; i < files.length; i++) {
         formData.append("files[" + i + "]", files[i]);
     }
