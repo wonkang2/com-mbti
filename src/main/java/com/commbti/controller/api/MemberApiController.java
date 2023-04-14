@@ -43,4 +43,13 @@ public class MemberApiController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @GetMapping("/members/recovery")
+    public ResponseEntity getPassword(@RequestParam("email") String email,
+                                      @RequestParam("username") String username) {
+        log.info("비밀번호 찾기 호출 - email: {}", email);
+        memberService.findPassword(email, username);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

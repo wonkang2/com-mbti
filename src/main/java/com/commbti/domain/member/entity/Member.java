@@ -15,10 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -80,6 +77,14 @@ public class Member extends DateTime implements UserDetails {
         } else {
             this.isNonBlocked = true;
         }
+    }
+
+    public String resetPassword(PasswordEncoder passwordEncoder) {
+        this.loginFailCount = 0;
+        this.isAccountNonLocked = true;
+        String newPassword = UUID.randomUUID().toString();
+        this.password = passwordEncoder.encode(newPassword);
+        return newPassword;
     }
 
 
