@@ -5,6 +5,8 @@ import com.commbti.domain.member.dto.MemberResponseDto;
 import com.commbti.domain.member.dto.MemberSignupDto;
 import com.commbti.domain.member.entity.Member;
 import com.commbti.domain.member.repository.MemberRepository;
+import com.commbti.global.exception.BusinessLogicException;
+import com.commbti.global.exception.ExceptionCode;
 import com.commbti.global.mail.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +69,13 @@ public class MemberService {
         return memberRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("존재하지 않는 회원입니다. : " + username)
         );
+    }
+
+    public void checkDuplicateUsername(String username) {
+        boolean doesItExist = memberRepository.existsByUsername(username);
+        if (doesItExist == true) {
+            throw new BusinessLogicException(ExceptionCode.USERNAME_ALREADY_EXISTS);
+        }
     }
 
 }

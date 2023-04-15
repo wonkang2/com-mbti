@@ -63,6 +63,7 @@ public class SecurityConfig {
                         .antMatchers("/bulletin-board/*/edit", "/bulletin-board/*/post").authenticated()
                         .antMatchers(HttpMethod.GET, "/bulletin-board/**", "/comments/**", "/login/**", "/").permitAll()
                         .antMatchers("/api/signup", "/signup/**", "/api/members","/api/members/recovery").permitAll()
+                        .antMatchers("/api/auth/check/**").permitAll()
                         .anyRequest().authenticated());
         http
                 .formLogin()
