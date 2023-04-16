@@ -16,15 +16,28 @@
             </a>
         </div>
         <div class="section__body">
-            <div class="body__wrapper">
-                <div class="input__wrapper">
+            <div class="body__wrapper" id="bodyWrapper">
+                <div class="input__wrapper" id="emailWrapper">
                     <div class="form__typing__text">* 이메일</div>
-                    <input th:value="${dto.email}" name="email" class="form__typing__input" type="email" id="email">
+                    <div class="form__typing__input__wrapper">
+                        <input th:value="${dto.email}" name="email" class="form__typing__input" type="email" id="email">
+                        <button class="function__button" id="checkEmailButton">인증하기</button>
+                    </div>
                 </div>
-                <div class="input__wrapper">
+                <div class="input__wrapper" id="authNumberWrapper" style="display: none;">
+                    <div class="form__typing__text">* 인증번호</div>
+                    <div class="form__typing__input__wrapper">
+                        <input class="form__typing__input" id="authNumberInput">
+                        <button class="function__button" id="authNumberCheckButton">확인</button>
+                    </div>
+                </div>
+                <div class="input__wrapper" id="usernameWrapper">
                     <div class="form__typing__text">* 아이디</div>
-                    <input th:value="${dto.username}" name="username" class="form__typing__input" type="text"
-                           id="username">
+                    <div class="form__typing__input__wrapper">
+                        <input th:value="${dto.username}" name="username" class="form__typing__input" type="text"
+                               id="username">
+                        <button class="function__button" id="checkUsernameButton">중복확인</button>
+                    </div>
                 </div>
                 <div class="input__wrapper">
                     <div class="form__typing__text">* 비밀번호</div>
