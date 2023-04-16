@@ -25,7 +25,7 @@ findPassword.addEventListener("click", function () {
     passwordInfo.innerText = "아이디를 입력해주세요.";
 
     funcButton.type = "button";
-    funcButton.innerText = "조회하기";
+    funcButton.innerText = "비밀번호 재설정";
     funcButton.id = "findButton";
     funcButton.onclick = findPasswordFunc;
 });
