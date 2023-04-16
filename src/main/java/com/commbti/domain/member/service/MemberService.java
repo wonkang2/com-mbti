@@ -78,4 +78,12 @@ public class MemberService {
         }
     }
 
+    public String verifyEmail(String email) {
+        boolean doesItExist = memberRepository.existsByEmail(email);
+        if (doesItExist == true) {
+            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS);
+        }
+        return mailService.sendAuthNumber(email);
+    }
+
 }
