@@ -7,7 +7,10 @@ import com.commbti.domain.bulletinboard.entity.Bulletin;
 import com.commbti.domain.bulletinboard.repository.BulletinBoardRepository;
 import com.commbti.domain.file.service.ImageFileService;
 import com.commbti.domain.member.entity.Member;
+import com.commbti.global.event.BulletinViewEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -22,6 +26,7 @@ public class BulletinService {
 
     private final BulletinBoardRepository bulletinBoardRepository;
     private final ImageFileService imageFileService;
+    private final ApplicationEventPublisher eventPublisher;
 
     // 게시글 등록
     public Long createBulletin(Member member, BulletinPostDto postDto) {
@@ -36,7 +41,7 @@ public class BulletinService {
         return bulletin.getId();
     }
 
-//    // 게시글 수정
+    //    // 게시글 수정
     @Transactional
     public Long updateBulletin(Member member, Long bulletinId, BulletinPatchDto bulletinPatchDto) {
         Bulletin findBulletin = getVerifiedBulletin(bulletinId);
@@ -55,12 +60,21 @@ public class BulletinService {
     }
 
     // 게시글 상세 조회
-    // 게시글을 조회할 때 해당 게시글의 viewCount가 수정되므로 @transaction(readOnly = true) 사용 불가
+    @Transactional(readOnly = true)
+    public BulletinResponseDto findOne(Long bulletinId, boolean increaseNumberViews) {
+        log.info("게시글 상세 조회 호출");
+        Bulletin foundBulletin = getVerifiedBulletin(bulletinId);
+        // TODO: 새로고침 및 의도적으로 조회수를 올리는 문제를 해결해야 함.
+        if (increaseNumberViews == true) {
+            eventPublisher.publishEvent(new BulletinViewEvent(foundBulletin));
+        }
+        log.info("게시글 상세 조회 종료");
+        return foundBulletin.toBulletinResponseDto();
+    }
+
     public BulletinResponseDto findOne(Long bulletinId) {
         Bulletin findBulletin = getVerifiedBulletin(bulletinId);
 
-        // TODO: 새로고침 및 의도적으로 조회수를 올리는 문제를 해결해야 함.
-        findBulletin.addViewCount();
 
         return findBulletin.toBulletinResponseDto();
     }

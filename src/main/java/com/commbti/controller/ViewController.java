@@ -10,20 +10,28 @@ import com.commbti.domain.member.dto.MemberSignupDto;
 import com.commbti.domain.member.entity.Member;
 import com.commbti.domain.member.service.MemberService;
 import com.commbti.global.page.PageResponseDto;
+import com.commbti.global.validation.ViewCookie;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class ViewController {
+    private String increaseNumberViews;
 
     private static final int BOARD_SIZE = 10;
-    private final MemberService memberService;
     private final BoardService boardService;
     private final BulletinService bulletinService;
     private final CommentService commentService;
@@ -39,6 +47,7 @@ public class ViewController {
         model.addAttribute("error", error);
         return "/auth/login";
     }
+
     @GetMapping("/signup")
     public String getSignupPage(Model model) {
         MemberSignupDto memberSignupDto = new MemberSignupDto();
@@ -73,14 +82,48 @@ public class ViewController {
         return "/bulletin-board/post";
     }
 
+//    @GetMapping("/bulletin-board/bulletins/{bulletin-id}")
+//    public String getBulletin(@PathVariable("bulletin-id") Long bulletinId,
+//                              @RequestHeader(value = "Cookie", required = false) Cookie[] cookies,
+//                              HttpServletResponse response,
+//                              Model model) {
+//        /*
+//        쿠키가 비어있을 경우? 카운트 증가와 쿠키 추가 -> 쿠키는 24시간동안
+//        쿠키가 있을 경우? 본 게시물로 아무것도 x
+//         */
+//        Cookie cookie = validateViewNumberCookie(bulletinId, cookies);
+//        BulletinResponseDto bulletinResponse = bulletinService.findOne(cookie, bulletinId);
+//
+//        PageResponseDto<CommentResponseDto> commentResponse = commentService.findCommentPageByBulletinId(bulletinId, 1, 10);
+//
+//        model.addAttribute("bulletin", bulletinResponse);
+//        model.addAttribute("commentPage", commentResponse);
+//        log.info("쿠키 주소값 : {}",cookie.toString());
+//        log.info("쿠키 값 : {}",cookie.getValue());
+//
+//        response.addCookie(cookie);
+//        return "/bulletin-board/bulletin";
+//    }
+
     @GetMapping("/bulletin-board/bulletins/{bulletin-id}")
     public String getBulletin(@PathVariable("bulletin-id") Long bulletinId,
+                              @CookieValue(value = "VIEWNUMBER", required = false) Cookie viewNumberCookie,
+                              HttpServletResponse response,
                               Model model) {
-        BulletinResponseDto bulletinResponse = bulletinService.findOne(bulletinId);
+        /*
+        쿠키가 비어있을 경우? 카운트 증가와 쿠키 추가 -> 쿠키는 24시간동안
+        쿠키가 있을 경우? 본 게시물로 아무것도 x
+         */
+        ViewCookie viewCookie = ViewCookie.validateViewNumberCookie(bulletinId, viewNumberCookie);
+
+        BulletinResponseDto bulletinResponse = bulletinService.findOne(bulletinId, viewCookie.isIncreaseNumberViews());
+
         PageResponseDto<CommentResponseDto> commentResponse = commentService.findCommentPageByBulletinId(bulletinId, 1, 10);
 
         model.addAttribute("bulletin", bulletinResponse);
         model.addAttribute("commentPage", commentResponse);
+
+        response.addCookie(viewCookie.getCookie());
         return "/bulletin-board/bulletin";
     }
 
@@ -104,5 +147,7 @@ public class ViewController {
         model.addAttribute("commentPage", commentResponse);
         return "/bulletin-board/bulletin";
     }
+
+
 
 }
