@@ -101,15 +101,15 @@
                             <!--해당 게시글을 작성한 유저: 수정하기 삭제하기-->
                             <!--TODO:해당 게시글을 작성하지 않은 유저: 신고하기-->
                             <button th:if="${#authorization.expr('isAuthenticated()')} and ${#authentication.principal.id} == ${comment.memberId}"
-                                    th:data-comment-id="${comment.commentId}"
+                                    th:data-comment-id="${comment.commentId}" th:id="'editButton-' + ${comment.commentId}"
                                     class="comment__edit__button">수정하기
                             </button>
                             <button th:if="${#authorization.expr('isAuthenticated()')} and ${#authentication.principal.id} == ${comment.memberId}"
-                                    th:data-comment-id="${comment.commentId}"
+                                    th:data-comment-id="${comment.commentId}" th:id="'deleteButton-' + ${comment.commentId}"
                                     class="comment__delete__button">
                                 삭제하기
                             </button>
-                            <button th:data-comment-id="${comment.commentId}"
+                            <button th:data-comment-id="${comment.commentId}" th:id="'saveButton-' + ${comment.commentId}"
                                     class="comment__save__button">
                                 저장하기
                             </button>
