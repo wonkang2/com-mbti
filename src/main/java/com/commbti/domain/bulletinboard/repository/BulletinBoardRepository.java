@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 
 public interface BulletinBoardRepository extends JpaRepository<Bulletin, Long> {
 
@@ -17,4 +19,15 @@ public interface BulletinBoardRepository extends JpaRepository<Bulletin, Long> {
     @Override
     @EntityGraph(attributePaths = {"member"})
     Page<Bulletin> findAll(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"member"})
+    @Override
+    Optional<Bulletin> findById(Long bulletinId);
+
+    @EntityGraph(attributePaths = {"member"})
+    Page<Bulletin> findByTitleContaining(String title, Pageable pageable);
+    @EntityGraph(attributePaths = {"member"})
+    Page<Bulletin> findByContentContaining(String content, Pageable pageable);
+    @EntityGraph(attributePaths = {"member"})
+    Page<Bulletin> findByMember_mbtiTypeContainsIgnoreCase(String mbti, Pageable pageable);
 }

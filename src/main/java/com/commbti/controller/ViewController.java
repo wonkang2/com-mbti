@@ -29,9 +29,6 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 @Controller
 public class ViewController {
-    private String increaseNumberViews;
-
-    private static final int BOARD_SIZE = 10;
     private final BoardService boardService;
     private final BulletinService bulletinService;
     private final CommentService commentService;
@@ -69,11 +66,15 @@ public class ViewController {
     }
 
     @GetMapping("/bulletin-board")
-    public String getBoardPage(@RequestParam("page") int page,
-                               @RequestParam("size") int size,
+    public String getBoardPage(@RequestParam(value = "type", defaultValue = "none") String type,
+                               @RequestParam(value = "keyword", defaultValue = "none") String keyword,
+                               @RequestParam(value = "page", defaultValue = "1") int page,
+                               @RequestParam(value = "size", defaultValue = "10") int size,
                                Model model) {
-        PageResponseDto<BulletinResponseDto> bulletinPage = boardService.findBulletinPage(page, BOARD_SIZE);
+        PageResponseDto<BulletinResponseDto> bulletinPage = boardService.findBulletinPage(type, keyword, page, size);
         model.addAttribute("bulletinPage", bulletinPage);
+        model.addAttribute("type", type);
+        model.addAttribute("keyword", keyword);
         return "/bulletin-board/board";
     }
 
@@ -81,29 +82,6 @@ public class ViewController {
     public String getBulletinPostPage() {
         return "/bulletin-board/post";
     }
-
-//    @GetMapping("/bulletin-board/bulletins/{bulletin-id}")
-//    public String getBulletin(@PathVariable("bulletin-id") Long bulletinId,
-//                              @RequestHeader(value = "Cookie", required = false) Cookie[] cookies,
-//                              HttpServletResponse response,
-//                              Model model) {
-//        /*
-//        쿠키가 비어있을 경우? 카운트 증가와 쿠키 추가 -> 쿠키는 24시간동안
-//        쿠키가 있을 경우? 본 게시물로 아무것도 x
-//         */
-//        Cookie cookie = validateViewNumberCookie(bulletinId, cookies);
-//        BulletinResponseDto bulletinResponse = bulletinService.findOne(cookie, bulletinId);
-//
-//        PageResponseDto<CommentResponseDto> commentResponse = commentService.findCommentPageByBulletinId(bulletinId, 1, 10);
-//
-//        model.addAttribute("bulletin", bulletinResponse);
-//        model.addAttribute("commentPage", commentResponse);
-//        log.info("쿠키 주소값 : {}",cookie.toString());
-//        log.info("쿠키 값 : {}",cookie.getValue());
-//
-//        response.addCookie(cookie);
-//        return "/bulletin-board/bulletin";
-//    }
 
     @GetMapping("/bulletin-board/bulletins/{bulletin-id}")
     public String getBulletin(@PathVariable("bulletin-id") Long bulletinId,
@@ -147,7 +125,6 @@ public class ViewController {
         model.addAttribute("commentPage", commentResponse);
         return "/bulletin-board/bulletin";
     }
-
 
 
 }
