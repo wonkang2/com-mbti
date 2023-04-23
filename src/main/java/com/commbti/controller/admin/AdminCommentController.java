@@ -20,11 +20,15 @@ public class AdminCommentController {
     private final AdminCommentService adminCommentService;
 
     @GetMapping
-    public String getAdminCommentPage(@RequestParam(defaultValue = "1") int page,
-                                       @RequestParam(defaultValue = "10") int size,
-                                       Model model) {
-        PageResponseDto<AdminCommentResponseDto> commentPage = adminCommentService.findCommentPage(page, size);
+    public String getAdminCommentPage(@RequestParam(defaultValue = "none") String type,
+                                      @RequestParam(defaultValue = "none") String keyword,
+                                      @RequestParam(defaultValue = "1") int page,
+                                      @RequestParam(defaultValue = "10") int size,
+                                      Model model) {
+        PageResponseDto<AdminCommentResponseDto> commentPage = adminCommentService.findCommentPage(type, keyword, page, size);
         model.addAttribute("commentPage", commentPage);
+        model.addAttribute("type", type);
+        model.addAttribute("keyword", keyword);
         return "admin/admin-comment";
     }
 

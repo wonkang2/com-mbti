@@ -5,9 +5,7 @@ import com.commbti.domain.member.entity.Member;
 import com.commbti.domain.member.repository.MemberRepository;
 import com.commbti.global.page.PageResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,15 +20,28 @@ public class AdminMemberService {
                 () -> new IllegalArgumentException("존재하지 않는 회원입니다."));
         foundMember.updateBlockStatus();
     }
-    public PageResponseDto<AdminCommentResponseDto> findMemberPage(int page, int size) {
+
+    public PageResponseDto<AdminCommentResponseDto> findMemberPage(String type, String keyword, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         Sort sort = Sort.by(Sort.Order.asc("id"));
         pageRequest.withSort(sort);
-        Page<Member> memberPage = memberRepository.findAll(pageRequest);
+        Page<Member> memberPage;
+
+        if (type.equals("none") && type.equals("none")) {
+            memberPage = memberRepository.findAll(pageRequest);
+        } else if (type.equals("email")) {
+            memberPage = memberRepository.findByEmailStartsWith(pageRequest, keyword);
+        } else if (type.equals("username")) {
+            memberPage = memberRepository.findByUsernameStartsWith(pageRequest, keyword);
+        } else if (type.equals("id")) {
+            memberPage = memberRepository.findById(pageRequest, Long.parseLong(keyword));
+        } else {
+            throw new IllegalArgumentException("잘못된 요청입니다.");
+        }
+
         PageResponseDto<AdminCommentResponseDto> response = PageResponseDto.toAdminMemberPage(memberPage);
 
         return response;
     }
-
 
 }

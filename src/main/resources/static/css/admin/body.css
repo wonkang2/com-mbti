@@ -2,8 +2,11 @@ main {
     width: 100%;
 }
 
-section {
-    width: 100%;
+.section__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 30px;
 }
 table {
     width: 100%;

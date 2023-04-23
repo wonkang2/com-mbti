@@ -22,12 +22,16 @@ public class AdminBulletinController {
     private final CommentService commentService;
 
     @GetMapping
-    public String getAdminBulletinPage(@RequestParam(defaultValue = "1") int page,
+    public String getAdminBulletinPage(@RequestParam(value = "type", defaultValue = "none") String type,
+                                       @RequestParam(value = "keyword", defaultValue = "none") String keyword,
+                                       @RequestParam(defaultValue = "1") int page,
                                        @RequestParam(defaultValue = "10") int size,
                                        Model model) {
-        PageResponseDto<AdminBulletinResponseDto> bulletinPage = adminBulletinService.findBulletinPage(page, size);
+        PageResponseDto<AdminBulletinResponseDto> bulletinPage = adminBulletinService.findBulletinPage(type, keyword, page, size);
 
         model.addAttribute("bulletinPage", bulletinPage);
+        model.addAttribute("type", type);
+        model.addAttribute("keyword", keyword);
         return "admin/admin-bulletin";
     }
 

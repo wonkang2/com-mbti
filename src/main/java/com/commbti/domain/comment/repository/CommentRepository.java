@@ -20,4 +20,13 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Override
     @EntityGraph(attributePaths = {"member"})
     Page<Comment> findAll(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"member"})
+    Page<Comment> findById(Pageable pageable, Long id);
+    @EntityGraph(attributePaths = {"member"})
+    Page<Comment> findByMember_id(Pageable pageable, Long id);
+    @EntityGraph(attributePaths = {"member"})
+    Page<Comment> findByMember_username(Pageable pageable, String username);
+    @EntityGraph(attributePaths = {"member"})
+    Page<Comment> findByContentContains(Pageable pageable, String content);
 }

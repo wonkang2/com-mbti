@@ -25,9 +25,14 @@ public interface BulletinBoardRepository extends JpaRepository<Bulletin, Long> {
     Optional<Bulletin> findById(Long bulletinId);
 
     @EntityGraph(attributePaths = {"member"})
-    Page<Bulletin> findByTitleContaining(String title, Pageable pageable);
+    Page<Bulletin> findById(Pageable pageable, Long id);
     @EntityGraph(attributePaths = {"member"})
-    Page<Bulletin> findByContentContaining(String content, Pageable pageable);
+    Page<Bulletin> findByTitleContains(Pageable pageable, String title);
     @EntityGraph(attributePaths = {"member"})
-    Page<Bulletin> findByMember_mbtiTypeContainsIgnoreCase(String mbti, Pageable pageable);
+    Page<Bulletin> findByContentContains(Pageable pageable, String content);
+    @EntityGraph(attributePaths = {"member"})
+    Page<Bulletin> findByMember_usernameContains(Pageable pageable, String username);
+    @EntityGraph(attributePaths = {"member"})
+    Page<Bulletin> findByMember_id(Pageable pageable, Long id);
+
 }

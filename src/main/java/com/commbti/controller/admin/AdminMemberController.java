@@ -25,13 +25,19 @@ public class AdminMemberController {
     }
 
     @GetMapping("/members")
-    public String getAdminMemberPage(@RequestParam(defaultValue = "1") int page,
+    public String getAdminMemberPage(@RequestParam(defaultValue = "none") String type,
+                                     @RequestParam(defaultValue = "none") String keyword,
+                                     @RequestParam(defaultValue = "1") int page,
                                      @RequestParam(defaultValue = "10") int size,
                                      Model model) {
-        PageResponseDto<AdminCommentResponseDto> memberPage = adminMemberService.findMemberPage(page, size);
+
+        PageResponseDto<AdminCommentResponseDto> memberPage = adminMemberService.findMemberPage(type, keyword, page, size);
         model.addAttribute("memberPage", memberPage);
+        model.addAttribute("type", type);
+        model.addAttribute("keyword", keyword);
         return "admin/admin-member";
     }
+
 
     @GetMapping("/members/{memberId}/block")
     public String block(@PathVariable Long memberId,
