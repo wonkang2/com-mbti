@@ -53,7 +53,7 @@ public class CommentService {
                 () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")
         );
 
-        if (foundComment.getMember().getId() != member.getId()) {
+        if (!foundComment.getMember().getId().equals(member.getId())) {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
 
@@ -64,12 +64,14 @@ public class CommentService {
 
     // 댓글 삭제 TODO
     public void deleteComment(Member member, Long commentId) {
-        Optional<Comment> optionalComment = commentRepository.findById(commentId);
-
-        Comment findComment = optionalComment.orElseThrow(
+        Comment foundComment = commentRepository.findById(commentId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
 
-        commentRepository.delete(findComment);
+        if (!foundComment.getMember().getId().equals(member.getId())) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+
+        commentRepository.delete(foundComment);
     }
 
     public void deleteAllByBulletinId(Long bulletinId) {

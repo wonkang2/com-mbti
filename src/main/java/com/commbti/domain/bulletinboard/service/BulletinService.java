@@ -46,7 +46,7 @@ public class BulletinService {
     public Long updateBulletin(Member member, Long bulletinId, BulletinPatchDto bulletinPatchDto) {
         Bulletin findBulletin = getVerifiedBulletin(bulletinId);
 
-        if (member.getId() != findBulletin.getMember().getId()) {
+        if (!findBulletin.getMember().getId().equals(member.getId())) {
             throw new IllegalArgumentException("잘못된 접근입니다.");
         }
 
@@ -64,18 +64,15 @@ public class BulletinService {
     public BulletinResponseDto findOne(Long bulletinId, boolean increaseNumberViews) {
         log.info("게시글 상세 조회 호출");
         Bulletin foundBulletin = getVerifiedBulletin(bulletinId);
-        // TODO: 새로고침 및 의도적으로 조회수를 올리는 문제를 해결해야 함.
         if (increaseNumberViews == true) {
             eventPublisher.publishEvent(new BulletinViewEvent(foundBulletin));
         }
         log.info("게시글 상세 조회 종료");
         return foundBulletin.toBulletinResponseDto();
     }
-
+    @Transactional(readOnly = true)
     public BulletinResponseDto findOne(Long bulletinId) {
         Bulletin findBulletin = getVerifiedBulletin(bulletinId);
-
-
         return findBulletin.toBulletinResponseDto();
     }
 
@@ -84,7 +81,7 @@ public class BulletinService {
     public boolean deleteOne(Member member, Long bulletinId) {
         Bulletin findBulletin = getVerifiedBulletin(bulletinId);
 
-        if (member.getId() != findBulletin.getMember().getId()) {
+        if (!findBulletin.getMember().getId().equals(member.getId())) {
             throw new IllegalArgumentException("잘못된 접근입니다.");
         }
 
