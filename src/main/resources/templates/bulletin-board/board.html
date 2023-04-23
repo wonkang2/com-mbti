@@ -75,7 +75,7 @@
             <ul class="pagination"
                 th:with="start=${pageInfo.startNumber}, end=${pageInfo.endNumber}">
                 <li class="pagination__wrapper" th:if="${start > 1}">
-                    <a class="pagination__btn" th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page=${start} - 10)}"
+                    <a class="pagination__btn" th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page=${end} - 10)}"
                        th:text="'<<'"></a>
                 </li>
                 <li class="pagination__wrapper" th:if="${pageInfo.hasPreviousPage}">
@@ -98,8 +98,8 @@
                        th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page=${pageInfo.currentPage} + 1)}"
                        th:text="'>'"></a>
                 </li>
-                <li class="pagination__wrapper" th:if="${end < pageInfo.totalPage}">
-                    <a class="pagination__btn" th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page=${end} + 10)}"
+                <li class="pagination__wrapper" th:if="${end + 10 <= pageInfo.totalPage}">
+                    <a class="pagination__btn" th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page=${start} + 10)}"
                        th:text="'>>'"></a>
                 </li>
             </ul>

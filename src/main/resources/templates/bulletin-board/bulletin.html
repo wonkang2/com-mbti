@@ -129,7 +129,7 @@
                     th:with="start=${pageInfo.startNumber}, end=${pageInfo.endNumber}">
                     <li class="pagination__wrapper" th:if="${start > 1}">
                         <a class="pagination__btn"
-                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${start} - 10, size=10)}"
+                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${end} - 10, size=10)}"
                            th:text="'<<'"></a>
                     </li>
                     <li class="pagination__wrapper" th:if="${pageInfo.hasPreviousPage}">
@@ -152,9 +152,9 @@
                            th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${pageInfo.currentPage} + 1, size=10)}"
                            th:text="'>'"></a>
                     </li>
-                    <li class="pagination__wrapper" th:if="${end < pageInfo.totalPage}">
+                    <li class="pagination__wrapper" th:if="${end + 10 <= pageInfo.totalPage}">
                         <a class="pagination__btn"
-                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${end} + 10, size=10)}"
+                           th:href="@{'/bulletin-board/bulletins/' + ${bulletin.bulletinId} + '/comments'(page=${start} + 10, size=10)}"
                            th:text="'>>'"></a>
                     </li>
                 </ul>
