@@ -1,7 +1,6 @@
 package com.commbti.domain.bulletinboard.entity;
 
 import com.commbti.domain.admin.dto.AdminBulletinResponseDto;
-import com.commbti.domain.bulletinboard.dto.BoardResponseDto;
 import com.commbti.domain.bulletinboard.dto.BulletinResponseDto;
 import com.commbti.domain.file.entity.ImageFile;
 import com.commbti.domain.member.entity.Member;
@@ -22,11 +21,11 @@ public class Bulletin extends DateTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bulletin_id")
     private Long id;
+    @Column(name = "title", nullable = false, length = 60)
     private String title;
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
-    private String thumbnailPath;
-    private Long viewCount;
+    private Long viewCount = 0L;
 
     @Formula("(select count(1) from Comment c where c.bulletin_id = bulletin_id)")
     private Long commentCount;
@@ -45,7 +44,6 @@ public class Bulletin extends DateTime {
         this.title = title;
         this.content = content;
         this.member = member;
-        this.viewCount = 0L;
     }
 
     public static Bulletin createArticle(String title, String content, Member member) {
@@ -57,10 +55,6 @@ public class Bulletin extends DateTime {
                 .ifPresent(title -> this.title = title);
         Optional.ofNullable(optionalContent)
                 .ifPresent(content -> this.content = content);
-    }
-
-    public void updateThumbnail(String thumbnailPath) {
-        this.thumbnailPath = thumbnailPath;
     }
 
     public void addViewCount() {
@@ -79,19 +73,6 @@ public class Bulletin extends DateTime {
                 .imageFileList(this.imageFileList)
                 .viewCount(this.viewCount)
                 .createdAt(super.getCreatedAt())
-                .build();
-    }
-
-    public BoardResponseDto toBoardResponseDto() {
-        return BoardResponseDto.builder()
-                .id(this.id)
-                .title(this.title)
-                .content(this.content)
-                .mbtiType(this.member.getMbtiType())
-                .createdAt(this.getCreatedAt())
-                .viewCount(this.viewCount)
-                .commentCount(this.commentCount)
-                .thumbnailPath(this.thumbnailPath)
                 .build();
     }
 

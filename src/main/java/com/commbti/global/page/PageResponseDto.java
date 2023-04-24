@@ -26,13 +26,11 @@ public class PageResponseDto<T> {
         this.pageContents = pageContents;
     }
 
-    public static PageResponseDto<BulletinResponseDto> toBulletinPage(Page<Bulletin> bulletinPage) {
+        public static PageResponseDto<BulletinResponseDto> toBulletinPage(Page<BoardResponseDto> bulletinPage) {
         PageInfo pageInfo = new PageInfo(bulletinPage);
-        List<BoardResponseDto> boardResponseDtoList = bulletinPage.stream().map(bulletin -> bulletin.toBoardResponseDto())
-                .collect(Collectors.toList());
+        List<BoardResponseDto> boardResponseDtoList = bulletinPage.toList();
 
         return new PageResponseDto(pageInfo, boardResponseDtoList);
-
     }
 
     public static PageResponseDto<AdminBulletinResponseDto> toAdminBulletinPage(Page<Bulletin> bulletinPage) {

@@ -24,7 +24,6 @@ public class BoardResponseDto {
     }
 
     /* Repository 에서 바로 변환 */
-    @Builder
     public BoardResponseDto(Long id, String title, String content, MbtiType mbtiType, LocalDateTime createdAt, Long viewCount, Long commentCount, String thumbnailPath) {
         this.id = id;
         this.title = title;
@@ -35,4 +34,5 @@ public class BoardResponseDto {
         this.commentCount = commentCount;
         this.thumbnailPath = thumbnailPath;
     }
+
 }
