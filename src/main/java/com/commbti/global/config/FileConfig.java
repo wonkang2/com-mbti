@@ -1,4 +1,4 @@
-package com.commbti.domain.file.config;
+package com.commbti.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

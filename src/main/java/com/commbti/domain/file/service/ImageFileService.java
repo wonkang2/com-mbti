@@ -7,11 +7,10 @@ import java.util.List;
 
 public interface ImageFileService {
 
-    void uploadFiles(Bulletin bulletin, List<MultipartFile> multipartFile);
+    void uploadFiles(Bulletin bulletin, List<MultipartFile> multipartFiles);
 
-//    String updateFile(String filePath, MultipartFile multipartFile);
-//
-//    void deleteFile(String filePath);
+    void updateFiles(Bulletin bulletin, List<Long> deleteImageIdList, List<MultipartFile> multipartFiles);
+    void deleteFiles(List<Long> imageIdList);
 
 
 }

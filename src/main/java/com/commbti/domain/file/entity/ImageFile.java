@@ -14,7 +14,6 @@ public class ImageFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String filename;
     private String filepath;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,18 +26,14 @@ public class ImageFile {
         }
         this.bulletin = bulletin;
 
-        if (bulletin.getThumbnailPath() == null) {
-            bulletin.updateThumbnail(this.filepath);
-        }
         bulletin.getImageFileList().add(this);
     }
-    private ImageFile(String filename, String filepath, Bulletin bulletin) {
-        this.filename = filename;
+    private ImageFile(String filepath, Bulletin bulletin) {
         this.filepath = filepath;
         setBulletin(bulletin);
     }
-    public static ImageFile createImageFile(String fileName, String filePath, Bulletin bulletin) {
-        return new ImageFile(fileName, filePath, bulletin);
+    public static ImageFile createImageFile(String filePath, Bulletin bulletin) {
+        return new ImageFile(filePath, bulletin);
     }
 
     public ImageFileResponseDto toResponseDto() {
