@@ -23,7 +23,7 @@ public class Bulletin extends DateTime {
     private Long id;
     @Column(name = "title", nullable = false, length = 60)
     private String title;
-    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "content", nullable = false, length = 1000)
     private String content;
     private Long viewCount = 0L;
 
