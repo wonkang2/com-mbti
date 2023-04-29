@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -68,8 +69,8 @@ public class ViewController {
     @GetMapping("/bulletin-board")
     public String getBoardPage(@RequestParam(value = "type", defaultValue = "none") String type,
                                @RequestParam(value = "keyword", defaultValue = "none") String keyword,
-                               @RequestParam(value = "page", defaultValue = "1") int page,
-                               @RequestParam(value = "size", defaultValue = "10") int size,
+                               @Min(value = 1, message = "페이지 요청은 최소 1부터 가능합니다.") @RequestParam(value = "page", defaultValue = "1") int page,
+                               @Min(value = 10, message = "페이지의 사이즈는 최소 10부터 가능합니다.")@RequestParam(value = "size", defaultValue = "10") int size,
                                Model model) {
         PageResponseDto<BulletinResponseDto> bulletinPage = boardService.findBulletinPage(type, keyword, page, size);
         model.addAttribute("bulletinPage", bulletinPage);
@@ -84,7 +85,7 @@ public class ViewController {
     }
 
     @GetMapping("/bulletin-board/bulletins/{bulletin-id}")
-    public String getBulletin(@PathVariable("bulletin-id") Long bulletinId,
+    public String getBulletin(@Min(value = 1,message = "정상적인 요청이 아닙니다.") @PathVariable("bulletin-id") Long bulletinId,
                               @CookieValue(value = "VIEWNUMBER", required = false) Cookie viewNumberCookie,
                               HttpServletResponse response,
                               Model model) {
@@ -106,7 +107,7 @@ public class ViewController {
     }
 
     @GetMapping("/bulletin-board/bulletins/{bulletin-id}/edit")
-    public String getEditPage(@PathVariable("bulletin-id") Long bulletinId,
+    public String getEditPage(@Min (value = 1,message = "정상적인 요청이 아닙니다.") @PathVariable("bulletin-id") Long bulletinId,
                               Model model) {
         BulletinResponseDto bulletin = bulletinService.findOne(bulletinId);
         model.addAttribute("bulletin", bulletin);
@@ -114,9 +115,9 @@ public class ViewController {
     }
 
     @GetMapping("/bulletin-board/bulletins/{bulletin-id}/comments")
-    public String getBulletin(@PathVariable("bulletin-id") Long bulletinId,
-                              @RequestParam(defaultValue = "1") int page,
-                              @RequestParam(defaultValue = "10") int size,
+    public String getBulletin(@Min (value = 1,message = "정상적인 요청이 아닙니다.") @PathVariable("bulletin-id") Long bulletinId,
+                              @Min(value = 1, message = "페이지 요청은 최소 1부터 가능합니다.") @RequestParam(defaultValue = "1") int page,
+                              @Min(value = 10, message = "페이지의 사이즈는 최소 10부터 가능합니다.") @RequestParam(defaultValue = "10") int size,
                               Model model) {
         BulletinResponseDto bulletinResponse = bulletinService.findOne(bulletinId);
         PageResponseDto<CommentResponseDto> commentResponse = commentService.findCommentPageByBulletinId(bulletinId, page, size);

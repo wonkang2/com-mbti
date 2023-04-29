@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.net.URI;
 
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class BulletinApiController {
 
     @PostMapping
     public ResponseEntity post(@AuthenticationPrincipal Member loginMember,
-                               BulletinPostDto request) {
+                               @Valid BulletinPostDto request) {
 
         Long bulletinId = bulletinService.createBulletin(loginMember, request);
         URI uri = URI.create("/bulletin-board/bulletins/" + bulletinId);
@@ -32,8 +34,8 @@ public class BulletinApiController {
 
     @PatchMapping("/{bulletin-id}")
     public ResponseEntity patch(@AuthenticationPrincipal Member loginMember,
-                                @PathVariable("bulletin-id") Long bulletinId,
-                                BulletinPatchDto bulletinPatchDto) {
+                                @Min (value = 1,message = "정상적인 요청이 아닙니다.") @PathVariable("bulletin-id") Long bulletinId,
+                                @Valid BulletinPatchDto bulletinPatchDto) {
 
         bulletinService.updateBulletin(loginMember, bulletinId, bulletinPatchDto);
         return ResponseEntity.ok().header("Location", "/bulletin-board/bulletins/" + bulletinId).build();
@@ -41,7 +43,7 @@ public class BulletinApiController {
 
     @DeleteMapping("/{bulletin-id}")
     public ResponseEntity delete(@AuthenticationPrincipal Member loginMember,
-                                 @PathVariable("bulletin-id") Long bulletinId) {
+                                 @Min (value = 1,message = "정상적인 요청이 아닙니다.") @PathVariable("bulletin-id") Long bulletinId) {
 
         commentService.deleteAllByBulletinId(bulletinId);
         bulletinService.deleteOne(loginMember, bulletinId);
