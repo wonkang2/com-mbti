@@ -4,7 +4,7 @@ import com.commbti.domain.bulletinboard.entity.Bulletin;
 import com.commbti.domain.file.entity.ImageFile;
 import com.commbti.domain.file.repository.ImageFileRepository;
 import com.commbti.domain.file.service.ImageFileService;
-import com.commbti.global.exception.BusinessLogicException;
+import com.commbti.global.exception.ApiException;
 import com.commbti.global.exception.ExceptionCode;
 import com.commbti.global.validation.ImageTypeValidation;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,7 +40,7 @@ public class ImageFileServiceLocal implements ImageFileService {
         for (MultipartFile multipartFile : uploadFiles) {
             boolean isValidated = ImageTypeValidation.validFileType(multipartFile);
             if (!isValidated) {
-                throw new BusinessLogicException(ExceptionCode.UNSUPPORTED_EXTENSIONS);
+                throw new ApiException(ExceptionCode.UNSUPPORTED_EXTENSIONS);
             }
 
             String originalFilename =
@@ -56,7 +53,8 @@ public class ImageFileServiceLocal implements ImageFileService {
             try {
                 multipartFile.transferTo(savePath);
             } catch (IOException e) {
-                e.printStackTrace(); // 예외 처리 해야 함.
+                log.info("IOException 발생: {}", e.getMessage());
+                throw new ApiException(ExceptionCode.FILE_UPLOAD_FAILED);
             }
 
             ImageFile imageFile = ImageFile.createImageFile(saveFullPath, bulletin);
@@ -77,7 +75,7 @@ public class ImageFileServiceLocal implements ImageFileService {
             return;
         }
         for (Long imageId : imageIdList) {
-            ImageFile imageFile = imageFileRepository.findById(imageId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 파일입니다."));
+            ImageFile imageFile = imageFileRepository.findById(imageId).orElseThrow(() -> new ApiException(ExceptionCode.IMAGE_NOT_FOUND));
             deleteLocalFile(imageFile.getFilepath());
             imageFileRepository.delete(imageFile);
         }
