@@ -8,7 +8,6 @@ import com.commbti.domain.comment.service.CommentService;
 import com.commbti.domain.member.dto.MemberResponseDto;
 import com.commbti.domain.member.dto.MemberSignupDto;
 import com.commbti.domain.member.entity.Member;
-import com.commbti.domain.member.service.MemberService;
 import com.commbti.global.page.PageResponseDto;
 import com.commbti.global.validation.ViewCookie;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Min;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Slf4j
 @RequiredArgsConstructor
