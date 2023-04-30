@@ -3,12 +3,13 @@ package com.commbti.domain.bulletinboard.service;
 import com.commbti.domain.bulletinboard.dto.BoardResponseDto;
 import com.commbti.domain.bulletinboard.dto.BulletinResponseDto;
 import com.commbti.domain.bulletinboard.repository.BulletinBoardRepository;
+import com.commbti.global.exception.ExceptionCode;
+import com.commbti.global.exception.ViewException;
 import com.commbti.global.page.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +33,7 @@ public class BoardService {
             } else if (type.equals("content")) {
                 boardDtoPage = bulletinBoardRepository.findBoardByContentContains(pageRequest, keyword);
             } else {
-                throw new IllegalArgumentException("잘못된 접근입니다.");
+                throw new ViewException(ExceptionCode.INVALID_PAGE_REQUEST);
             }
         }
         PageResponseDto<BulletinResponseDto> response = PageResponseDto.toBulletinPage(boardDtoPage);
