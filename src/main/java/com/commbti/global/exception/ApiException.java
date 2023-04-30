@@ -3,10 +3,10 @@ package com.commbti.global.exception;
 import lombok.Getter;
 
 @Getter
-public class BusinessLogicException extends RuntimeException {
+public class ApiException extends RuntimeException {
 
     private ExceptionCode exceptionCode;
-    public BusinessLogicException(ExceptionCode exceptionCode) {
+    public ApiException(ExceptionCode exceptionCode) {
         super(exceptionCode.getMessage());
         this.exceptionCode = exceptionCode;
     }
