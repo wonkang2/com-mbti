@@ -58,7 +58,7 @@ public class SecurityConfig {
 
                 .authorizeRequests(request -> request
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .antMatchers("/css/**", "/js/**", "/Users/**").permitAll()
+                        .antMatchers("/css/**", "/js/**", "/images/error/*", "/Users/**").permitAll()
                         .antMatchers("/admin/**").hasAnyRole("ADMIN")
                         .antMatchers("/bulletin-board/*/edit", "/bulletin-board/*/post").authenticated()
                         .antMatchers(HttpMethod.GET, "/bulletin-board/**", "/comments/**", "/login/**", "/").permitAll()
