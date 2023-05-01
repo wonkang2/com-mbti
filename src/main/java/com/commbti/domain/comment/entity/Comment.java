@@ -19,6 +19,7 @@ public class Comment extends DateTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
+    @Column(nullable = false, length = 255)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

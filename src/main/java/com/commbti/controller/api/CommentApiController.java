@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -21,8 +24,8 @@ public class CommentApiController {
 
     @PostMapping("/bulletins/{bulletinId}/comments")
     public ResponseEntity post(@AuthenticationPrincipal Member loginMember,
-                              @PathVariable Long bulletinId,
-                              @RequestBody CommentRequestDto request) {
+                              @Min (value = 1, message = "정상적인 요청이 아닙니다.")@PathVariable Long bulletinId,
+                              @Valid @RequestBody CommentRequestDto request) {
         commentService.createComment(loginMember, bulletinId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -30,8 +33,8 @@ public class CommentApiController {
 
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity patch(@AuthenticationPrincipal Member loginMember,
-                                @PathVariable Long commentId,
-                                @RequestBody CommentRequestDto commentRequestDto) {
+                                @Min (value = 1, message = "정상적인 요청이 아닙니다.")@PathVariable Long commentId,
+                                @Valid @RequestBody CommentRequestDto commentRequestDto) {
         CommentResponseDto response = commentService.updateComment(loginMember, commentId, commentRequestDto);
 
         return ResponseEntity.ok(response);
@@ -39,7 +42,7 @@ public class CommentApiController {
 
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity delete(@AuthenticationPrincipal Member loginMember,
-                                 @PathVariable Long commentId) {
+                                 @Min (value = 1, message = "정상적인 요청이 아닙니다.")@PathVariable Long commentId) {
         commentService.deleteComment(loginMember, commentId);
 
         return ResponseEntity.ok().build();
