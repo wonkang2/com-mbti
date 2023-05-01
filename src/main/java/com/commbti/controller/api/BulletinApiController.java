@@ -45,7 +45,7 @@ public class BulletinApiController {
     public ResponseEntity delete(@AuthenticationPrincipal Member loginMember,
                                  @Min (value = 1,message = "정상적인 요청이 아닙니다.") @PathVariable("bulletin-id") Long bulletinId) {
 
-        commentService.deleteAllByBulletinId(bulletinId);
+        commentService.deleteByBulletinId(bulletinId);
         bulletinService.deleteOne(loginMember, bulletinId);
 
         return ResponseEntity.ok().header("Location", "/").build();

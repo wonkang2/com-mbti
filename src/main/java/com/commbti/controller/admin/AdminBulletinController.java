@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Min;
 
 @RequiredArgsConstructor
 @RequestMapping("/admin/bulletins")
@@ -39,7 +38,7 @@ public class AdminBulletinController {
     @GetMapping("/{bulletinId}/delete")
     public String deleteBulletin(@PathVariable Long bulletinId,
                                  HttpServletRequest httpServletRequest) {
-        commentService.deleteAllByBulletinId(bulletinId);
+        commentService.deleteByBulletinId(bulletinId);
         adminBulletinService.delete(bulletinId);
 
         String referer = httpServletRequest.getHeader("Referer");
