@@ -25,8 +25,8 @@ public class AdminBulletinController {
     @GetMapping
     public String getAdminBulletinPage(@RequestParam(value = "type", defaultValue = "none") String type,
                                        @RequestParam(value = "keyword", defaultValue = "none") String keyword,
-                                       @Min(value = 1, message = "페이지 요청은 최소 1부터 가능합니다.") @RequestParam(defaultValue = "1") int page,
-                                       @Min(value = 10, message = "페이지의 사이즈는 최소 10부터 가능합니다.")@RequestParam(defaultValue = "10") int size,
+                                       @RequestParam(defaultValue = "1") int page,
+                                       @RequestParam(defaultValue = "10") int size,
                                        Model model) {
         PageResponseDto<AdminBulletinResponseDto> bulletinPage = adminBulletinService.findBulletinPage(type, keyword, page, size);
 
@@ -37,7 +37,7 @@ public class AdminBulletinController {
     }
 
     @GetMapping("/{bulletinId}/delete")
-    public String deleteBulletin(@Min(value = 1,message = "정상적인 요청이 아닙니다.") @PathVariable Long bulletinId,
+    public String deleteBulletin(@PathVariable Long bulletinId,
                                  HttpServletRequest httpServletRequest) {
         commentService.deleteAllByBulletinId(bulletinId);
         adminBulletinService.delete(bulletinId);
