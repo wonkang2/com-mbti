@@ -1,0 +1,76 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  margin: 15px 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #445566;
+  margin-bottom: 20px;
+  padding: 10px 0px;
+}
+
+.header__auth {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: start;
+}
+
+.header__auth__login, .header__auth__signup {
+  margin-left: 1px;
+}
+
+.header__auth__link {
+  text-decoration: none;
+  border: 1px solid #445566;
+  border-radius: 5px;
+  color: #445566;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+}
+
+.header__auth__link:hover {
+  background-color: #445566;
+
+  color: white;
+}
+
+.header__title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.header__title__link {
+  text-decoration: none;
+  color: #445555;
+  text-shadow: 4px 4px 1px #44556675;
+}
+
+.header__title__link:hover {
+  text-decoration: none;
+  color: #ee5522;
+  text-shadow: 4px 4px 1px #ffee00;
+}
+
+.header__title__link__text {
+  font-weight: 900;
+  font-size: 70px;
+  font-family: 'Nanum Pen Script', cursive;
+}

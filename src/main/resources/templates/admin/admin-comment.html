@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/admin/body.css">
+    <link rel="stylesheet" href="/css/admin/elements.css">
+    <link rel="stylesheet" href="/css/common/layout.css">
+    <link rel="stylesheet" href="/css/common/page.css">
+    <title>ComMBTI</title>
+    <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+<header th:replace="~{common/header :: header}">
+    페이지의 헤더 부분
+</header>
+
+
+<main class="main">
+    <header class="section__header">
+        <div class="nav__wrapper">
+            <a th:href="'/admin/members'" class="nav__member">회원 관리</a>
+            <a th:href="'/admin/bulletins'" class="nav__bulletin">게시글 관리</a>
+            <a th:href="'/admin/comments'" class="nav__comment">댓글 관리</a>
+        </div>
+        <form action="/admin/comments" method="GET" class="header__search">
+            <select name="type" class="search__type">
+                <option value="memberId" selected>작성자PK</option>
+                <option value="username">아이디</option>
+                <option value="id">번호</option>
+                <option value="content">내용</option>
+            </select>
+            <input type="text" placeholder="검색어를 입력해주세요." class="search__keyword" name="keyword">
+            <button class="search__button">검색</button>
+        </form>
+    </header>
+    <section>
+        <table>
+            <thead>
+            <th class="number__wrapper">번호</th>
+            <th class="number__wrapper">작성자PK</th>
+            <th>작성자 아이디</th>
+            <th class="content">내용</th>
+            <th>작성일</th>
+            <th class="function__wrapper">삭제</th>
+            </thead>
+            <tbody>
+            <tr th:each="comment : ${commentPage.pageContents}">
+                <td th:text="${comment.id}" class="number__wrapper"></td>
+                <td th:text="${comment.memberId}" class="number__wrapper"></td>
+                <td th:text="${comment.username}"></td>
+                <td th:text="${comment.content}" class="content"></td>
+                <td th:text="${#temporals.format(comment.createdAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></td>
+                <td class="function__wrapper">
+                    <div class="contentButton__wrapper">
+                    <a th:href="'/admin/comments/' + ${comment.id} + '/delete'"
+                    class="contentButton">
+                        삭제
+                    </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <nav th:if="${commentPage.pageInfo.total} > 0" class="nav__pagination">
+            <ul class="pagination"
+                th:with="start=${commentPage.pageInfo.startNumber}, end=${commentPage.pageInfo.endNumber}">
+                <li class="pagination__wrapper" th:if="${start > 1}">
+                    <a class="pagination__btn" th:href="@{/admin/comments(type=${type}, keyword=${keyword}, page=${end} - 10, size=10)}"
+                       th:text="'<<'"></a>
+                </li>
+                <li class="pagination__wrapper" th:if="${commentPage.pageInfo.hasPreviousPage}">
+                    <a class="pagination__btn"
+                       th:href="@{/admin/comments(type=${type}, keyword=${keyword}, page=${commentPage.pageInfo.currentPage} - 1, size=10)}"
+                       th:text="'<'"></a>
+                </li>
+
+                <li class="pagination__wrapper" th:each="page: ${#numbers.sequence(start, end)}">
+                    <a th:if="${page} == ${commentPage.getPageInfo().currentPage}" id="pagination_button_current"
+                       class="pagination__btn" th:text="${page}"
+                       th:href="@{/admin/comments(type=${type}, keyword=${keyword}, page=${page}, size=10)}"></a>
+                    <a th:unless="${page} == ${commentPage.getPageInfo().currentPage}" class="pagination__btn"
+                       th:text="${page}"
+                       th:href="@{/admin/comments(type=${type}, keyword=${keyword}, page=${page}, size=10)}"></a>
+                </li>
+
+                <li class="pagination__wrapper" th:if="${commentPage.pageInfo.hasNextPage}">
+                    <a class="pagination__btn"
+                       th:href="@{/admin/comments(type=${type}, keyword=${keyword}, page=${commentPage.pageInfo.currentPage} + 1, size=10)}"
+                       th:text="'>'"></a>
+                </li>
+                <li class="pagination__wrapper" th:if="${end + 10 <= commentPage.pageInfo.totalPage}">
+                    <a class="pagination__btn" th:href="@{/admin/bulletins(type=${type}, keyword=${keyword}, page=${start} + 10, size=10)}"
+                       th:text="'>>'"></a>
+                </li>
+            </ul>
+        </nav>
+    </section>
+    <footer class="section__footer"></footer>
+</main>
+
+</body>
+
+</html>

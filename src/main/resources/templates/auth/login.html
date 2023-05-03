@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/auth/layout.css">
+    <link rel="stylesheet" href="/css/auth/login.css">
+    <title>로그인</title>
+</head>
+
+<body>
+<section>
+    <div class="section__wrapper">
+        <div class="section__header">
+            <a href="/" class="section__header__title">
+                ComMBTI
+            </a>
+        </div>
+        <div class="section__body">
+            <form class="body__form" action="/login-process" method="post">
+                <div class="body__form__detail">
+                    <div class="input__wrapper">
+                        <div class="form__typing__text" id="info__username">* 아이디</div>
+                        <input name="username" class="form__typing__input" type="text"
+                               id="username">
+                    </div>
+                    <div class="input__wrapper" id="password__wrapper">
+                        <div class="form__typing__text" id="info__password">* 비밀번호</div>
+                        <input name="password" class="form__typing__input" type="password"
+                               id="password1">
+                    </div>
+                    <div th:unless="${error} == null" class="errorMessage">[[${error}]]</div>
+                </div>
+                <div class="body__form__button__wrapper">
+                    <button id="signupButton" class="body__form__button" type="submit">로그인</button>
+                </div>
+            </form>
+        </div>
+        <div class="section__footer">
+            <a th:href="'/signup'" class="section__footer__link">회원가입</a>
+            <ul class="section__footer__userInfo">
+                <li class="section__footer__userInfo__wrapper">
+                    <a class="section__footer__link" id="findUsername">아이디 찾기 |</a>
+                </li>
+                <li class="section__footer__userInfo__wrapper">
+                    <a class="section__footer__link" id="findPassword">비밀번호 찾기</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+</body>
+<script src="/js/auth/findUserInfo.js"></script>
+</html>

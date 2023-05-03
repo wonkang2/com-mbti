@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/auth/layout.css">
+    <link rel="stylesheet" href="/css/auth/signup.css">
+    <title>회원가입</title>
+</head>
+<body>
+<section>
+    <div class="section__wrapper">
+        <div class="section__header">
+            <a href="/" class="section__header__title">
+                ComMBTI
+            </a>
+        </div>
+        <div class="section__body">
+            <div class="body__wrapper">
+                <div class="input__wrapper">
+                    <div class="form__typing__text">* 이메일</div>
+                    <input th:value="${member.email}" name="email" class="form__typing__input" id="email" disabled>
+                </div>
+                <div class="input__wrapper">
+                    <div class="form__typing__text">* 아이디</div>
+                    <input th:value="${member.username}" name="username" class="form__typing__input"
+                           id="username" disabled>
+                </div>
+                <div class="input__wrapper">
+                    <div class="form__typing__text">* 비밀번호</div>
+                    <input name="password" class="form__typing__input" type="password" placeholder="비밀번호 변경을 원하시면 입력해주세요."
+                           id="password1">
+                </div>
+                <div class="input__wrapper">
+                    <div class="form__typing__text">* 비밀번호 확인</div>
+                    <input class="form__typing__input" type="password" id="password2" placeholder="비밀번호 변경을 원하시면 입력해주세요.">
+                </div>
+                <div class="select__wrapper">
+                    <div class="form__typing__text">* MBTI</div>
+                    <select th:value="${member.mbtiType}" name="mbti" id="mbti" class="input__select">
+                        <option value="none">MBTI을 선택해주세요.</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'INTJ')}" value="INTJ">INTJ</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'INTP')}" value="INTP">INTP</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ENTJ')}" value="ENTJ">ENTJ</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ENTP')}" value="ENTP">ENTP</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'INFJ')}" value="INFJ">INFJ</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'INFP')}" value="INFP">INFP</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ENFJ')}" value="ENFJ">ENFJ</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ENFP')}" value="ENFP">ENFP</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ISTJ')}" value="ISTJ">ISTJ</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ISFJ')}" value="ISFJ">ISFJ</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ESTJ')}" value="ESTJ">ESTJ</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ESFJ')}" value="ESFJ">ESFJ</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ISTP')}" value="ISTP">ISTP</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ISFP')}" value="ISFP">ISFP</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ESTP')}" value="ESTP">ESTP</option>
+                        <option th:selected="${#strings.equals(member.mbtiType,'ESFP')}" value="ESFP">ESFP</option>
+                    </select>
+                </div>
+                <div class="body__form__submit">
+                    <button id="saveButton" class="body__form__submit__button" type="button" th:data-member-id="${member.memberId}">수정하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+<script src="/js/auth/edit.js"></script>
+</html>

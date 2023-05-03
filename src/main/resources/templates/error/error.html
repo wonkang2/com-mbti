@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/common/layout.css">
+    <link rel="stylesheet" href="/css/error/error.css">
+    <title>Document</title>
+</head>
+<body>
+<header th:replace="/common/header::header">
+    게시판의 헤더 부분
+</header>
+<div class="error__wrapper">
+    <div class="error__message">Error: [[${message}]]</div>
+    <img class="error__image" th:src="${image}">
+</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bulletin-board/board.css">
+    <link rel="stylesheet" href="/css/common/layout.css">
+    <link rel="stylesheet" href="/css/common/page.css">
+    <title>ComMBTI</title>
+    <script src="https://kit.fontawesome.com/cc4e8a330a.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<header th:replace="~{common/header :: header}">
+    페이지의 헤더 부분
+</header>
+
+
+<main class="main">
+    <header class="section__header">
+        <form action="/bulletin-board" method="GET" class="header__search">
+            <select name="type" class="search__type">
+                <option value="title" selected>제목</option>
+                <option value="content">내용</option>
+            </select>
+            <input type="text" placeholder="검색어를 입력해주세요." class="search__keyword" name="keyword">
+            <button class="search__button">검색</button>
+        </form>
+        <div class="header__post">
+            <a th:href="'/bulletin-board/bulletins/post'" class="post__button">글쓰기</a>
+        </div>
+    </header>
+    <section class="section">
+        <ul class="article__wrapper">
+            <li th:each="bulletin: ${bulletinPage.pageContents}" class="article">
+                <a class="article__detail"
+                   th:href="'/bulletin-board/bulletins/' + ${bulletin.id}">
+                    <div th:unless="${bulletin.thumbnailPath == null}" class="article__detail__left__wrapper">
+                        <img class="article__detail__left__image" th:src="@{${bulletin.thumbnailPath}}">
+                    </div>
+
+                    <div class="article__detail__right__wrapper">
+                        <div class="article__detail__right__top">
+                            <div th:text="${bulletin.mbtiType} " class="right__top__info">
+                                (작성자의 MBTI) INTJ
+                            </div>
+                            <div th:text="${bulletin.title}" class="right__top__title">
+                                게시글_제목
+                            </div>
+                        </div>
+                        <div class="article__detail__right__middle">
+                            <div th:text="${bulletin.content}" class="right__middle__content">
+                                게시글_본문
+                            </div>
+                        </div>
+                        <div class="article__detail__right__bottom">
+                            <div class="right__bottom__info">
+                                <i class="fa-solid fa-eye"></i>
+                                <div th:text="${bulletin.viewCount}" class="right__bottom__info__detail">(조회수) 5</div>
+                            </div>
+                            <div class="right__bottom__info">
+                                <i class="fa-solid fa-comment"></i>
+                                <div th:text="${bulletin.commentCount}" class="right__bottom__info__detail">(댓글) 4</div>
+                            </div>
+                            <div class="right__bottom__info">
+                                <i class="fa-solid fa-clock"></i>
+                                <div th:text="${bulletin.createdAt}" class="right__bottom__info__detail"> 몇 분전</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        <nav th:with="pageInfo = ${bulletinPage.pageInfo}" th:if="${bulletinPage.pageInfo.total} > 0" class="nav__pagination">
+            <ul class="pagination"
+                th:with="start=${pageInfo.startNumber}, end=${pageInfo.endNumber}">
+                <li class="pagination__wrapper" th:if="${start > 1}">
+                    <a class="pagination__btn" th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page=${end} - 10)}"
+                       th:text="'<<'"></a>
+                </li>
+                <li class="pagination__wrapper" th:if="${pageInfo.hasPreviousPage}">
+                    <a class="pagination__btn"
+                       th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page= ${pageInfo.currentPage} - 1)}"
+                       th:text="'<'"></a>
+                </li>
+
+                <li class="pagination__wrapper" th:each="page: ${#numbers.sequence(start, end)}">
+                    <a th:if="${page} == ${pageInfo.currentPage}" id="pagination_button_current"
+                       class="pagination__btn" th:text="${page}"
+                       th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page=${page})}"></a>
+                    <a th:unless="${page} == ${pageInfo.currentPage}" class="pagination__btn"
+                       th:text="${page}"
+                       th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page=${page})}"></a>
+                </li>
+
+                <li class="pagination__wrapper" th:if="${pageInfo.hasNextPage}">
+                    <a class="pagination__btn"
+                       th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page=${pageInfo.currentPage} + 1)}"
+                       th:text="'>'"></a>
+                </li>
+                <li class="pagination__wrapper" th:if="${end + 10 <= pageInfo.totalPage}">
+                    <a class="pagination__btn" th:href="@{/bulletin-board(type=${type}, keyword=${keyword}, page=${start} + 10)}"
+                       th:text="'>>'"></a>
+                </li>
+            </ul>
+        </nav>
+    </section>
+    <footer class="section__footer"></footer>
+</main>
+
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+.section__body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 30px;
+}
+
+.body__form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.body__form__detail {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-bottom: 50px;
+}
+
+.input__wrapper {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.form__typing__text {
+    width: 100%;
+    color: #797979;
+    font-size: 14px;
+    font-weight: 400;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.form__typing__input {
+    height: 50px;
+    border: none;
+    width: 100%;
+    border-bottom: 1px solid #CFCFCF;
+    font-size: 16px;
+    outline: none;
+}
+
+
+.errorMessage {
+    width: 100%;
+    height: 40px;
+    color: #e65f3e;
+    font-size: 13px;
+    font-weight: 400;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.body__form__button {
+    width: 100%;
+    height: 70px;
+    background-color: white;
+    border: 1px solid #445566;
+    resize: none;
+    border-radius: 10px;
+
+    color: #0068ff;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.body__form__button:hover {
+    background-color: #0068ff;
+    color: white;
+    cursor: pointer;
+}
+
+.section__footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    width: 100%
+}
+
+.section__footer__link {
+    text-decoration: none;
+    color: #797979;
+}
+
+.section__footer__link:hover {
+    cursor: pointer;
+}
+
+.section__footer__userInfo {
+    padding: 0px;
+    display: flex;
+    flex-direction: row;
+}
+
+.section__footer__userInfo__wrapper {
+    list-style: none;
+    margin-left: 5px;
+}
